@@ -1,12 +1,12 @@
-package vue;
+package jeu.vue;
 
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
-import controleur.ControleurSelectionCase;
-import modele.Partie;
-import modele.Plateau;
+import jeu.controleur.ControleurSelectionCase;
+import jeu.modele.Case;
+import jeu.modele.Partie;
 
 public class VuePlateau extends JPanel {
 	
@@ -29,10 +29,12 @@ public class VuePlateau extends JPanel {
 		
 		for (int y = 0; y < n; y++) {
 			for(int x = 0; x < n; x++) {
-				 BoutonCase cb = new BoutonCase(x, y, Integer.toString(partie.getPlateau().getCase(x, y).getValeur()));
-				 cb.addActionListener(controleur);
-				 cases[y * n + x] = cb;
-				 add(cb);
+				Case c = partie.getPlateau().getCase(x, y);
+				BoutonCase cb = new BoutonCase(c, n);
+				c.addObserver(cb);
+				cb.addActionListener(controleur);
+				cases[y * n + x] = cb;
+				add(cb);
 			}
 		}
 	}

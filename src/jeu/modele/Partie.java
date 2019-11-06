@@ -1,4 +1,4 @@
-package modele;
+package jeu.modele;
 
 import java.awt.Color;
 import java.util.Random;
@@ -15,16 +15,16 @@ public class Partie {
 	
 	public Partie(int n, int max, String nom1, String nom2) {
 		this();
+		joueurs[0] = new Joueur(nom1, Color.red);
+		joueurs[1] = new Joueur(nom2, Color.blue);		
 		plateau = new Plateau().RemplirGrilleAleatoire(n, max);
-		joueurs[0] = new Joueur(nom1, Color.blue);
-		joueurs[1] = new Joueur(nom2, Color.red);		
 	}
 	
 	public Partie(String nomFichier, String nom1, String nom2) {
 		this();
-		plateau = new Plateau();
-		joueurs[0] = new Joueur(nom1, Color.blue);
-		joueurs[1] = new Joueur(nom2, Color.red);		
+		joueurs[0] = new Joueur(nom1, Color.red);
+		joueurs[1] = new Joueur(nom2, Color.blue);		
+		plateau = new Plateau().RemplirGrilleFichier(nomFichier, joueurs);
 	}
 	
 	/**

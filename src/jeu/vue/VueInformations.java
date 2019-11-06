@@ -1,4 +1,4 @@
-package vue;
+package jeu.vue;
 
 import java.awt.Dimension;
 

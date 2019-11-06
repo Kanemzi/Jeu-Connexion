@@ -1,15 +1,21 @@
-package vue;
+package jeu.vue;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
-import modele.Partie;
+import jeu.modele.Partie;
 
 public class VueJeu extends JPanel {
 	
 	private VueInformations informations;
 	private VuePlateau plateau;
+	private JMenuBar barreMenu;
+	private JMenu menuActions;
 	
 	public VueJeu(Partie partie) {
 		setLayout(new BorderLayout());
@@ -20,5 +26,6 @@ public class VueJeu extends JPanel {
 		
 		add(informations, BorderLayout.NORTH);
 		add(plateau, BorderLayout.CENTER);
+		
 	}
 }
