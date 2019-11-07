@@ -33,15 +33,18 @@ public class Case extends Observable {
 	 * On suppose que les deux cases ne sont pas déjà liées (afin de conserver une complexité constante)
 	 * On suppose également que la case et c sont des représentants de leur groupe
 	 * @param c la case à relier
+	 * @return retourne le représentant du nouveau groupe créé
 	 */
-	public void union(Case c) {
+	public Case union(Case c) {
 		if (profondeur < c.profondeur) {
 			parent = c.getParent();
+			return parent;
 		} else {
 			c.setParent(this);
 			if (profondeur == c.profondeur) {
 				profondeur = c.profondeur + 1;    
 			}
+			return c.getParent();
 		}
 	}
 	
@@ -96,5 +99,10 @@ public class Case extends Observable {
 
 	public void setProfondeur(int profondeur) {
 		this.profondeur = profondeur;
+	}
+
+	@Override
+	public String toString() {
+		return "Case [x=" + x + ", y=" + y + ", valeur=" + valeur + "]";
 	}
 }

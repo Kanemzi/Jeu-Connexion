@@ -40,7 +40,7 @@ public class ControleurSelectionCase implements ActionListener {
 		
 		// debug all cells
 		for (Case c : modele.getPlateau().getCases()) {
-			System.out.println(c.getX() + ", " + c.getY() + " (" + c.getValeur() + ")  : " + c.getParent());
+			System.out.println(c + " parent: " + c.getParent());
 		}
 		
 		modele.addTour();

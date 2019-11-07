@@ -84,13 +84,6 @@ public class Plateau {
 		
 		// relier les nouveaux groupes créés entre eux
 		RelierComposantes(x, y, proprietaire, true);
-		
-		// rattacher la nouvelle case à la nouvelle composante composée
-		List<Case> adjacentes = getCasesAdjacentes(nouvelleCase, proprietaire);
-		if (adjacentes.size() == 0) {
-			return; // si aucune case de même couleur adjacente
-		}
-		nouvelleCase.union(adjacentes.get(0));
 	}
 	
 	public int getTaille() {
@@ -141,6 +134,7 @@ public class Plateau {
 	 */
 	public boolean RelierComposantes(int x, int y, Joueur joueur, boolean lier) {
 		Case nouvelleCase = getCase(x, y);
+		Case representantCommun = null;
 		List<Case> adjacentes = getCasesAdjacentes(nouvelleCase, joueur);
 		boolean touteLiees = true;
 		// complexité de ces deux boucles constante car quelque soit N, la liste des adjacents vérifiera toujours |adjacents| <= 4
@@ -151,12 +145,19 @@ public class Plateau {
 				Case[] representants = ExisteCheminCases(c1, c2, joueur);
 				boolean liees = (representants == null);
 				if (lier && !liees) {
-					representants[0].union(representants[1]);
+					representantCommun = representants[0].union(representants[1]);
+					System.out.println("common: " + representantCommun);
 				}
 				touteLiees = touteLiees && liees;
 				// @TODO : possibilité d'optimiser un peu en quittant la boucle si toutLiees = false et !lier
 			}
 		}
+		
+		// rattacher la nouvelle case à la nouvelle composante composée
+		if (lier && representantCommun != null) {
+			nouvelleCase.union(representantCommun);
+		}
+
 		return !touteLiees;
 	}
 	
