@@ -3,7 +3,14 @@ package jeu.modele;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Set;
 
+/**
+ * Représente une case du plateau de jeu.
+ * Cette classe ce comporte comme une cellule dans une structure Classe-Union mais également comme un arbre, ce qui signifie qu'il est possible de
+ * parcourir les arbres de Cases dans les deux sens.
+ *
+ */
 public class Case extends Observable {
 	
 	private int x, y, valeur;
@@ -13,7 +20,7 @@ public class Case extends Observable {
 	private List<Case> enfants;
 
 	// une estimation de la profondeur de l'arbre.
-	// Calculer la hauteur exacte à chaque fois rajouterait une compexité inutile, d'autant plus que l'arbre est régulièrement applati
+	// Calculer la hauteur exacte à chaque fois rajouterait une complexité supplémentaire, d'autant plus que l'arbre est régulièrement applati
 	private int profondeur; 
 
 	/**
@@ -26,10 +33,11 @@ public class Case extends Observable {
 		this.x = x;
 		this.y = y;
 		this.valeur = valeur;
-		this.proprietaire = null;
-		this.parent = null;
-		this.enfants = new LinkedList<>(); // ajouts et suppressions en temps constant
-		this.profondeur = 0;
+		
+		proprietaire = null;
+		parent = null;
+		enfants = new LinkedList<>(); // ajouts et suppressions en temps constant
+		profondeur = 0;
 	}
 	
 	/**
@@ -43,30 +51,48 @@ public class Case extends Observable {
 		if (profondeur < c.profondeur) {
 			setParent(c);
 			return c;
-		} else {
-			c.setParent(this);
-			if (profondeur == c.profondeur) {
-				profondeur = c.profondeur + 1;    
-			}
-			return this;
 		}
+		
+		c.setParent(this);
+		if (profondeur == c.profondeur)
+			profondeur = c.profondeur + 1;
+		
+		return this;
 	}
 	
 	/**
 	 * @return le représentant du groupe de la case
 	 */
 	public Case classe() {
-		// @TODO: spécifier la complexité
-		Case p = this;
-		while (p.parent != null) {
-			p = p.parent;
-		}
-		if (parent != null) { // remonter de parent uniquement si le noeud n'est pas déjà un représentant
-			setParent(p); // applatissement de l'arbre
-		}
-		return p;
+		if (parent == null) return this;
+		setParent(parent.classe());
+		return parent;
 	}
 
+	/**
+	 * O(c) : avec c le nombre de cases dans la composante
+	 * @return l'ensemble des noeuds dans le sous arbre de la case (case inclue)
+	 */
+	public Set<Case> getNoeudsArbre(Set<Case> liste ) {
+		liste.add(this);
+		for (Case enfant : enfants) {
+			enfant.getNoeudsArbre(liste);
+		}
+		return liste;
+	}
+	
+	/**
+	 * O(c) : avec c le nombre de cases dans la composante
+	 * @return retourne le score contenu dans le sous arbre de la classe (case inclue)
+	 */
+	public int getScoreArbre() {
+		int compteur = valeur;
+		for (Case enfant : enfants) {
+			compteur += enfant.getScoreArbre();
+		}
+		return compteur;
+	}
+	
 	public Joueur getProprietaire() {
 		return proprietaire;
 	}
@@ -93,26 +119,22 @@ public class Case extends Observable {
 		return parent;
 	}
 	
-	public List<Case> getEnfants() {
-		return enfants;
-	}
-	
 	public void setParent(Case parent) {
 		parent.getEnfants().remove(this); // O(1)
 		this.parent = parent;
 		parent.getEnfants().add(this); // O(1)
 	}
 	
+	public List<Case> getEnfants() {
+		return enfants;
+	}
+	
 	public int getProfondeur() {
 		return profondeur;
 	}
 
-	public void setProfondeur(int profondeur) {
-		this.profondeur = profondeur;
-	}
-
 	@Override
 	public String toString() {
-		return "Case [x=" + x + ", y=" + y + ", valeur=" + valeur + "]";
+		return "Case [x=" + x + ", y=" + y + ", p=" + profondeur + "]";
 	}
 }

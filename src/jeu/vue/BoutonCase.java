@@ -19,13 +19,12 @@ public class BoutonCase extends JButton implements Observer {
 			
 	private int caseX, caseY;
 	
-	public BoutonCase(Case c, int n) {
+	public BoutonCase(Case c, int n, int taille) {
 		super(Integer.toString(c.getValeur()));
 		
 		caseX = c.getX();
 		caseY = c.getY();
-		
-		int taille = Config.WINDOW_SIZE / n;
+
 		setPreferredSize(new Dimension(taille, taille));
 		setBackground(Color.white);
 		setFocusPainted(false);

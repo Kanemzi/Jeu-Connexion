@@ -17,7 +17,7 @@ public class JeuConnexion extends JFrame {
 	public JeuConnexion() {
 		partie = null;
 		vue = null;
-		menu = new VueMenuActions();
+		menu = new VueMenuActions(this);
 		
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -25,10 +25,11 @@ public class JeuConnexion extends JFrame {
 		setJMenuBar(menu);
 	}
 	
-	public void nouvellePartie() {
-		// Partie p = new Partie("res/plateaux/exemple.plat", "Rouge", "Bleu");
-		Partie partie = new Partie(4, 3, "Rouge", "Bleu");
-		VueJeu vue = new VueJeu(partie);
+	public void JouerDeuxHumains(String nomJoueur1, String nomJoueur2, int taille, int max) {
+		if (vue != null) remove(vue);
+
+		partie = new Partie(taille, max, nomJoueur1, nomJoueur2);
+		vue = new VueJeu(partie);
 		
 		add(vue);
 		pack();
@@ -36,6 +37,6 @@ public class JeuConnexion extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		new JeuConnexion().nouvellePartie();
+		new JeuConnexion().JouerDeuxHumains("Roger", "Michel", 6, 4);
 	}
 }

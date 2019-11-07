@@ -3,19 +3,21 @@ package jeu.modele;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Plateau {
 	
-	private int n; // taille du plateau en largeur et hauteur
-	private int max; // valeur maximale d'une case sur le plateau
-	private List<Case> cases; // liste des cases du plateau
+	private int n;
+	private int max;
+	private List<Case> cases;
 	
 	/**
 	 * Générer un plateau aléatoire
+	 * O(n) : avec n le nombre de cases sur le plateau (ne pas confondre avec le n passé en paramètre qui représente la taille du plateau)
 	 * @param n la taille du plateau
 	 * @param max la valeur maximale d'une cellule
 	 */
@@ -36,6 +38,7 @@ public class Plateau {
 	
 	/**
 	 * Génère un plateau à partir d'un fichier
+	 * O(n) : avec n le nombre de cases sur le plateau (ne pas confondre avec le n passé en paramètre qui représente la taille du plateau)
 	 * @param file le nom du fichier à charger
 	 */
 	public Plateau RemplirGrilleFichier(String nomFichier, Joueur[] joueurs) {
@@ -72,6 +75,8 @@ public class Plateau {
 	
 	/**
 	 * Change la couleur de la case en fonction de la couleur d'un des joueurs de la partie
+	 * O(log max(cs)) : avec cs les tailles des composantes adjacentes à la case coloriée
+	 * -> dans la pratique, complexité constante
 	 * @param x la position horizontale de la case à colorier
 	 * @param y la position verticale de la case à colorier
 	 * @param proprietaire le joueur ayant pris la case
@@ -80,13 +85,13 @@ public class Plateau {
 		Case nouvelleCase = getCase(x, y);
 		nouvelleCase.setProprietaire(proprietaire);
 		
-		// relier les nouveaux groupes créés entre eux
 		RelierComposantes(x, y, proprietaire, true);
 	}
-	
-	
+
 	/**
 	 * Teste si il existe un chemin d'une couleur spécifique entre deux cases
+	 * O(log max(c1, c2)) : avec c1 le nombre d'éléments dans la composante de la case c1 et c2 le nombre d'éléments dans la composante de case c2
+	 * -> dans la pratique, complexité constante
 	 * @param c1 la première case à tester
 	 * @param c2 la seconde case à tester
 	 * @param proprietaire le joueur de la couleur dont on souhaite tester le chemin
@@ -106,6 +111,8 @@ public class Plateau {
 	
 	/**
 	 * Teste si la coloration d'une certaine case de la couleur d'un joueur permet de relier deux composantes déjà présentes sur le plateau
+	 * O(log max(cs)) : avec cs les tailles des composantes adjacentes à la case testée
+	 * -> dans la pratique, complexité constante
 	 * @param x la position horizontale de la case à tester
 	 * @param y la position verticale de la case à tester
 	 * @param joueur le joueur de la couleur dont on souhaite tester la liaison
@@ -117,6 +124,7 @@ public class Plateau {
 		Case nouvelleCase = getCase(x, y);
 		List<Case> adjacentes = getCasesAdjacentes(nouvelleCase, joueur);
 		boolean toutesLiees = true;
+		
 		// complexité de ces deux boucles constante car quelque soit N, la liste des adjacents vérifiera toujours |adjacents| <= 4
 		for (int i = 0; i < adjacentes.size(); i++) {
 			for (int j = i; j < adjacentes.size(); j++) {
@@ -125,7 +133,6 @@ public class Plateau {
 				if (c1 == c2) continue;
 				
 				Case[] representants = ExisteCheminCases(c1, c2, joueur);
-				// System.out.println("representants : " + Arrays.toString(representants));
 				boolean liees = (representants == null);
 				
 				if (lier && !liees) {
@@ -140,11 +147,35 @@ public class Plateau {
 			if (adjacentes.size() > 0) {
 				Case representant = adjacentes.get(0).classe();
 				nouvelleCase.union(representant);
-				
 			}
 		}
-		
+
 		return !toutesLiees;
+	}
+
+	/**
+	 * Retourne l'ensemble des cases d'une composante
+	 * O(n) : avec n le nombre de cases dans la composante
+	 * @param x la position horizontale de la case à tester
+	 * @param y la position verticale de la case à tester
+	 * @return la liste des cases de la composante ou null si la case ne se trouve dans aucune composante
+	 */
+	public Set<Case> AfficherComposante(int x, int y) {
+		Case representant = getCase(x, y).classe();
+		if (representant.getProprietaire() == null) return null;
+		return representant.getNoeudsArbre(new LinkedHashSet<Case>());
+	}
+	
+	/**
+	 * Retourne le score total d'une composante
+	 * O(n) : avec n le nombre de cases dans la composante
+	 * @param x la position horizontale de la case à tester
+	 * @param y la position verticale de la case à tester
+	 * @return le score de la composante
+	 */
+	public int AfficherScore(int x, int y) {
+		Case representant = getCase(x, y).classe();
+		return representant.getScoreArbre();
 	}
 	
 	/**
