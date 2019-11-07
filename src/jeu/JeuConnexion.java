@@ -26,7 +26,7 @@ public class JeuConnexion extends JFrame {
 	}
 	
 	public void nouvellePartie() {
-		Partie p = new Partie("res/plateaux/exemple.plat", "Rouge", "Bleu");
+		// Partie p = new Partie("res/plateaux/exemple.plat", "Rouge", "Bleu");
 		Partie partie = new Partie(4, 3, "Rouge", "Bleu");
 		VueJeu vue = new VueJeu(partie);
 		

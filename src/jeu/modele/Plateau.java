@@ -3,19 +3,16 @@ package jeu.modele;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Plateau {
 	
-	private int n;
-	private int max;
-	private List<Case> cases;
+	private int n; // taille du plateau en largeur et hauteur
+	private int max; // valeur maximale d'une case sur le plateau
+	private List<Case> cases; // liste des cases du plateau
 	
 	/**
 	 * Générer un plateau aléatoire
@@ -87,23 +84,6 @@ public class Plateau {
 		RelierComposantes(x, y, proprietaire, true);
 	}
 	
-	public int getTaille() {
-		return n;
-	}
-
-	public List<Case> getCases() {
-		return cases;
-	}
-	
-	public Case getCase(int x, int y) {
-		if (x < 0 || y < 0 || x >= n || y >= n) return null;
-		return cases.get(y * n + x);
-	}
-	
-	public Case getCase(int i) {
-		if (i < 0 || i > n * n) return null;
-		return cases.get(i);
-	}
 	
 	/**
 	 * Teste si il existe un chemin d'une couleur spécifique entre deux cases
@@ -135,10 +115,7 @@ public class Plateau {
 	 */
 	public boolean RelierComposantes(int x, int y, Joueur joueur, boolean lier) {
 		Case nouvelleCase = getCase(x, y);
-		Case representantCommun = null;
 		List<Case> adjacentes = getCasesAdjacentes(nouvelleCase, joueur);
-		System.out.println("____________________________\n" + nouvelleCase);
-		System.out.println(adjacentes);
 		boolean toutesLiees = true;
 		// complexité de ces deux boucles constante car quelque soit N, la liste des adjacents vérifiera toujours |adjacents| <= 4
 		for (int i = 0; i < adjacentes.size(); i++) {
@@ -148,24 +125,22 @@ public class Plateau {
 				if (c1 == c2) continue;
 				
 				Case[] representants = ExisteCheminCases(c1, c2, joueur);
-				System.out.println("representants : " + Arrays.toString(representants));
+				// System.out.println("representants : " + Arrays.toString(representants));
 				boolean liees = (representants == null);
 				
 				if (lier && !liees) {
-					representantCommun = representants[0].union(representants[1]);
+					representants[0].union(representants[1]);
 				}
 				
 				toutesLiees = toutesLiees && liees;
-				// @TODO : possibilité d'optimiser un peu en quittant la boucle si toutLiees = false et !lier
 			}
 		}
 		
 		if (lier) {
 			if (adjacentes.size() > 0) {
-				System.out.println("CASE : " + nouvelleCase);
-				System.out.println("LINK " + adjacentes.get(0).classe());
-				Case d = nouvelleCase.union(adjacentes.get(0).classe());
-				System.out.println("REP COMMUN : " + d);
+				Case representant = adjacentes.get(0).classe();
+				nouvelleCase.union(representant);
+				
 			}
 		}
 		
@@ -201,4 +176,22 @@ public class Plateau {
 	public List<Case> getCasesAdjacentes(Case c) {
 		return getCasesAdjacentes(c, null);
 	}
+	
+	public int getTaille() {
+		return n;
+	}
+
+	public List<Case> getCases() {
+		return cases;
+	}
+	
+	public Case getCase(int x, int y) {
+		if (x < 0 || y < 0 || x >= n || y >= n) return null;
+		return cases.get(y * n + x);
+	}
+	
+	public Case getCase(int i) {
+		if (i < 0 || i > n * n) return null;
+		return cases.get(i);
+	}	
 }

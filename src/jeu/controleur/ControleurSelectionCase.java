@@ -32,15 +32,16 @@ public class ControleurSelectionCase implements ActionListener {
 		
 		
 		Joueur joueurTour = modele.getJoueurTour();
-		System.out.println("va relier :" + modele.getPlateau().RelierComposantes(caseCliquee.getX(), caseCliquee.getY(), joueurTour, false));
+		// System.out.println("va relier :" + modele.getPlateau().RelierComposantes(caseCliquee.getX(), caseCliquee.getY(), joueurTour, false));
 
 		modele.getPlateau().ColorerCase(caseCliquee.getX(), caseCliquee.getY(), joueurTour);
 		
 		//System.out.println("link :" + (modele.getPlateau().ExisteCheminCases( modele.getPlateau().getCase(0, 2),  modele.getPlateau().getCase(2, 0), modele.getJoueurs()[1]) == null));
 		
 		// debug all cells
+		System.out.println("___________________________________");
 		for (Case c : modele.getPlateau().getCases()) {
-			System.out.println(c + " parent: " + c.getParent());
+			System.out.println(c + " ##### parent: " + c.getParent() + " ##### enfants: " + c.getEnfants());
 		}
 		
 		modele.addTour();

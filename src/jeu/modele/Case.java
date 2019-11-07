@@ -1,5 +1,7 @@
 package jeu.modele;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 
 public class Case extends Observable {
@@ -8,6 +10,7 @@ public class Case extends Observable {
 	private Joueur proprietaire;
 	
 	private Case parent;
+	private List<Case> enfants;
 
 	// une estimation de la profondeur de l'arbre.
 	// Calculer la hauteur exacte à chaque fois rajouterait une compexité inutile, d'autant plus que l'arbre est régulièrement applati
@@ -25,6 +28,7 @@ public class Case extends Observable {
 		this.valeur = valeur;
 		this.proprietaire = null;
 		this.parent = null;
+		this.enfants = new LinkedList<>(); // ajouts et suppressions en temps constant
 		this.profondeur = 0;
 	}
 	
@@ -37,7 +41,7 @@ public class Case extends Observable {
 	 */
 	public Case union(Case c) {
 		if (profondeur < c.profondeur) {
-			parent = c;
+			setParent(c);
 			return c;
 		} else {
 			c.setParent(this);
@@ -58,7 +62,7 @@ public class Case extends Observable {
 			p = p.parent;
 		}
 		if (parent != null) { // remonter de parent uniquement si le noeud n'est pas déjà un représentant
-			parent = p; // applatissement de l'arbre
+			setParent(p); // applatissement de l'arbre
 		}
 		return p;
 	}
@@ -89,8 +93,14 @@ public class Case extends Observable {
 		return parent;
 	}
 	
+	public List<Case> getEnfants() {
+		return enfants;
+	}
+	
 	public void setParent(Case parent) {
+		parent.getEnfants().remove(this); // O(1)
 		this.parent = parent;
+		parent.getEnfants().add(this); // O(1)
 	}
 	
 	public int getProfondeur() {
