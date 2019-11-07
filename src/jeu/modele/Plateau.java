@@ -3,6 +3,7 @@ package jeu.modele;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -136,29 +137,39 @@ public class Plateau {
 		Case nouvelleCase = getCase(x, y);
 		Case representantCommun = null;
 		List<Case> adjacentes = getCasesAdjacentes(nouvelleCase, joueur);
-		boolean touteLiees = true;
+		System.out.println("____________________________\n" + nouvelleCase);
+		System.out.println(adjacentes);
+		boolean toutesLiees = true;
 		// complexité de ces deux boucles constante car quelque soit N, la liste des adjacents vérifiera toujours |adjacents| <= 4
-		for (Case c1 : adjacentes) {
-			for (Case c2 : adjacentes) {
+		for (int i = 0; i < adjacentes.size(); i++) {
+			for (int j = i; j < adjacentes.size(); j++) {
+				Case c1 = adjacentes.get(i);
+				Case c2 = adjacentes.get(j);
 				if (c1 == c2) continue;
 				
 				Case[] representants = ExisteCheminCases(c1, c2, joueur);
+				System.out.println("representants : " + Arrays.toString(representants));
 				boolean liees = (representants == null);
+				
 				if (lier && !liees) {
 					representantCommun = representants[0].union(representants[1]);
-					System.out.println("common: " + representantCommun);
 				}
-				touteLiees = touteLiees && liees;
+				
+				toutesLiees = toutesLiees && liees;
 				// @TODO : possibilité d'optimiser un peu en quittant la boucle si toutLiees = false et !lier
 			}
 		}
 		
-		// rattacher la nouvelle case à la nouvelle composante composée
-		if (lier && representantCommun != null) {
-			nouvelleCase.union(representantCommun);
+		if (lier) {
+			if (adjacentes.size() > 0) {
+				System.out.println("CASE : " + nouvelleCase);
+				System.out.println("LINK " + adjacentes.get(0).classe());
+				Case d = nouvelleCase.union(adjacentes.get(0).classe());
+				System.out.println("REP COMMUN : " + d);
+			}
 		}
-
-		return !touteLiees;
+		
+		return !toutesLiees;
 	}
 	
 	/**

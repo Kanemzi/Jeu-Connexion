@@ -37,14 +37,14 @@ public class Case extends Observable {
 	 */
 	public Case union(Case c) {
 		if (profondeur < c.profondeur) {
-			parent = c.getParent();
-			return parent;
+			parent = c;
+			return c;
 		} else {
 			c.setParent(this);
 			if (profondeur == c.profondeur) {
 				profondeur = c.profondeur + 1;    
 			}
-			return c.getParent();
+			return this;
 		}
 	}
 	

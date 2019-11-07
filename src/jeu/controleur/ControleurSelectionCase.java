@@ -36,7 +36,7 @@ public class ControleurSelectionCase implements ActionListener {
 
 		modele.getPlateau().ColorerCase(caseCliquee.getX(), caseCliquee.getY(), joueurTour);
 		
-		System.out.println("link :" + (modele.getPlateau().ExisteCheminCases( modele.getPlateau().getCase(0, 2),  modele.getPlateau().getCase(2, 0), modele.getJoueurs()[1]) == null));
+		//System.out.println("link :" + (modele.getPlateau().ExisteCheminCases( modele.getPlateau().getCase(0, 2),  modele.getPlateau().getCase(2, 0), modele.getJoueurs()[1]) == null));
 		
 		// debug all cells
 		for (Case c : modele.getPlateau().getCases()) {
