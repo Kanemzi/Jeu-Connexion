@@ -8,21 +8,22 @@ import javax.swing.JOptionPane;
 import jeu.JeuConnexion;
 import jeu.vue.modales.ModaleNouvellePartie;
 
-public class ControleurNouvellePartieJoueur implements ActionListener {
+public class ControleurNouvellePartie implements ActionListener {
 
-	JeuConnexion jeu;
+	private JeuConnexion jeu;
+	private boolean ordinateur;
+	private ModaleNouvellePartie parametres;
 	
-	public ControleurNouvellePartieJoueur(JeuConnexion jeu) {
+	public ControleurNouvellePartie(JeuConnexion jeu, boolean ordinateur) {
 		this.jeu = jeu;
+		this.ordinateur = ordinateur;
+		parametres = new ModaleNouvellePartie(ordinateur);
 	}
 	
 	public void actionPerformed(ActionEvent ev) {
-		ModaleNouvellePartie parametres = new ModaleNouvellePartie(false);
 		parametres.afficher();
 		if (!parametres.valide()) return;
 		
-		
 		jeu.JouerDeuxHumains(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax());
 	}
-
 }

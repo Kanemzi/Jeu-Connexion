@@ -22,9 +22,9 @@ public class ModaleNouvellePartie {
 	public ModaleNouvellePartie(boolean ordi) {
 		ordinateur = ordi;
 		champJoueur1 = new JTextField("Joueur" + (ordinateur ? "" : " 1"));
-		champJoueur2 = new JTextField(ordinateur ? "Ordinateur" : "Joueur 2");
-		champTaillePlateau = new JTextField("2");
-		champValeurMax = new JTextField("1");
+		champJoueur2 = new JTextField(ordinateur ? "Bip Boop" : "Joueur 2");
+		champTaillePlateau = new JTextField("6");
+		champValeurMax = new JTextField("3");
 		formulaire = new JPanel();
 		
 		formulaire.setLayout(new GridLayout(4, 2));
@@ -57,7 +57,7 @@ public class ModaleNouvellePartie {
 	
 	public String getNomJoueur2() {
 		String nom = champJoueur2.getText();
-		return nom.isEmpty() ? (ordinateur ? "Ordinateur" : "Joueur 2") : nom;
+		return nom.isEmpty() ? (ordinateur ? "Bip Boop" : "Joueur 2") : nom;
 	}
 	
 	public int getTaillePlateau() {

@@ -1,6 +1,6 @@
 package jeu;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
@@ -20,9 +20,13 @@ public class JeuConnexion extends JFrame {
 		menu = new VueMenuActions(this);
 		
 		setResizable(false);
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setJMenuBar(menu);
+		
+		setSize(new Dimension(Config.WINDOW_SIZE, Config.WINDOW_SIZE));
+		
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 	
 	public void JouerDeuxHumains(String nomJoueur1, String nomJoueur2, int taille, int max) {
@@ -33,10 +37,9 @@ public class JeuConnexion extends JFrame {
 		
 		add(vue);
 		pack();
-		setVisible(true);
 	}
 	
 	public static void main(String[] args) {
-		new JeuConnexion().JouerDeuxHumains("Roger", "Michel", 6, 4);
+		new JeuConnexion();
 	}
 }

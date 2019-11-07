@@ -26,7 +26,7 @@ public class VuePlateau extends JPanel {
 	
 	public void init(Partie partie) {
 		int n = partie.getPlateau().getTaille();
-				
+
 		cases = new BoutonCase[n * n];
 		grille = new GridLayout(n, n);
 		controleur = new ControleurSelectionCase(partie, parent);
