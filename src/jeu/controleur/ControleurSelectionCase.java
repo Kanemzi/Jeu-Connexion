@@ -65,6 +65,12 @@ public class ControleurSelectionCase implements ActionListener {
 
 		vue.getOverlay().setDernierCoup(caseCliquee);
 		
-		modele.addTour();
+		if (modele.terminee()) {
+			JOptionPane.showMessageDialog(null, "Partie terminée", "Partie terminée", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			modele.addTour();			
+		}
+		
+		vue.getInformations().mettreAJourCompteur(modele.getTour(), modele.getMaxTour(), modele.getJoueurTour());
 	}
 }

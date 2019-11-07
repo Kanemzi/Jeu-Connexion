@@ -19,7 +19,7 @@ public class ControleurNouvellePartie implements ActionListener {
 		this.ordinateur = ordinateur;
 		parametres = new ModaleNouvellePartie(ordinateur);
 	}
-	
+
 	public void actionPerformed(ActionEvent ev) {
 		parametres.afficher();
 		if (!parametres.valide()) return;

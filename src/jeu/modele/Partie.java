@@ -8,16 +8,19 @@ public class Partie {
 	private Joueur[] joueurs;
 	
 	private int tour;
+	private int maxTours;
 	
 	public Partie() {
-		joueurs = new Joueur[2];
+		tour = 0;
+		joueurs = new Joueur[2];	
 	}
-	
+
 	public Partie(int n, int max, String nom1, String nom2) {
 		this();
 		joueurs[0] = new Joueur(nom1, Color.red);
 		joueurs[1] = new Joueur(nom2, Color.blue);		
 		plateau = new Plateau().RemplirGrilleAleatoire(n, max);
+		maxTours = plateau.getTaille() * plateau.getTaille();
 	}
 	
 	public Partie(String nomFichier, String nom1, String nom2) {
@@ -25,6 +28,7 @@ public class Partie {
 		joueurs[0] = new Joueur(nom1, Color.red);
 		joueurs[1] = new Joueur(nom2, Color.blue);		
 		plateau = new Plateau().RemplirGrilleFichier(nomFichier, joueurs);
+		maxTours = plateau.getTaille() * plateau.getTaille();
 	}
 	
 	/**
@@ -50,8 +54,15 @@ public class Partie {
 		return tour;
 	}
 	
+	public int getMaxTour() {
+		return maxTours;
+	}
+	
 	public void addTour() {
 		tour++;
 	}
 	
+	public boolean terminee() {
+		return tour >= maxTours - 1;
+	}
 }

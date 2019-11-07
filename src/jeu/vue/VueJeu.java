@@ -24,7 +24,7 @@ public class VueJeu extends JPanel {
 		setLayout(new BorderLayout());
 		
 		// création des sous vues
-		informations = new VueInformations();
+		informations = new VueInformations(this, partie);
 		plateau = new VuePlateau(this, partie);
 		overlay = new OverlayPlateau(plateau);
 		
@@ -36,5 +36,13 @@ public class VueJeu extends JPanel {
 	
 	public OverlayPlateau getOverlay() {
 		return overlay;
+	}
+	
+	public VueInformations getInformations() {
+		return informations;
+	}
+	
+	public VuePlateau getPlateau() {
+		return plateau;
 	}
 }

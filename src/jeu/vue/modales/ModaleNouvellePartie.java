@@ -66,7 +66,7 @@ public class ModaleNouvellePartie {
 	}
 	
 	public int getValeurMax() {
-		int max = Integer.parseInt(champTaillePlateau.getText());
+		int max = Integer.parseInt(champValeurMax.getText());
 		return max < 1 ? 1 : max; 
 	}
 }
