@@ -14,6 +14,11 @@ public class Plateau {
 	private int n;
 	private int max;
 	private List<Case> cases;
+	private int placees; // nombre de cases déjà coloriées
+	
+	public Plateau() {
+		placees = 0;
+	}
 	
 	/**
 	 * Générer un plateau aléatoire
@@ -63,6 +68,7 @@ public class Plateau {
 				for(int x = 0; x < n; x++) {
 					int id = Integer.parseInt(scan.next());
 					if (id == 0) continue;
+					placees ++;
 					Joueur proprietaire = joueurs[id - 1];
 					ColorerCase(x, y, proprietaire);
 				}
@@ -224,5 +230,9 @@ public class Plateau {
 	public Case getCase(int i) {
 		if (i < 0 || i > n * n) return null;
 		return cases.get(i);
-	}	
+	}
+	
+	public int getPlacees() {
+		return placees;
+	}
 }

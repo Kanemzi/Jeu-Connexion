@@ -28,6 +28,7 @@ public class Partie {
 		joueurs[0] = new Joueur(nom1, Color.red);
 		joueurs[1] = new Joueur(nom2, Color.blue);		
 		plateau = new Plateau().RemplirGrilleFichier(nomFichier, joueurs);
+		tour = plateau.getPlacees();
 		maxTours = plateau.getTaille() * plateau.getTaille();
 	}
 	
