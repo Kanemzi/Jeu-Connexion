@@ -3,11 +3,15 @@ package jeu.vue;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -18,7 +22,8 @@ public class VueInformations extends JPanel {
 	
 	private static Font font = new Font("sans-serif", Font.PLAIN, 20);	
 	
-	private JPanel encartJoueur1, encartJoueur2, encartTour;
+	private Map<Joueur, JPanel> encartsJoueurs;
+	private JPanel encartTour;
 	private JLabel compteurTours;
 	private VueJeu parent;
 	
@@ -26,16 +31,17 @@ public class VueInformations extends JPanel {
 		this.parent = parent;
 		Dimension size = getPreferredSize();
 		size.height = 96;
+		encartsJoueurs = new HashMap<>();
 		setPreferredSize(size);
 		setBorder(BorderFactory.createMatteBorder(0, 0, 4, 0, Color.gray));
 
 		setLayout(new GridLayout(1, 3));
 		
-		encartJoueur1 = new JPanel();
-		remplirEncartJoueur(encartJoueur1, partie.getJoueurs()[0]);
+		encartsJoueurs.put(partie.getJoueurs()[0], new JPanel()); 
+		remplirEncartJoueur(partie.getJoueurs()[0]);
 		
-		encartJoueur2 = new JPanel();
-		remplirEncartJoueur(encartJoueur2, partie.getJoueurs()[1]);
+		encartsJoueurs.put(partie.getJoueurs()[1], new JPanel()); 
+		remplirEncartJoueur(partie.getJoueurs()[1]);
 		
 		encartTour = new JPanel();
 		encartTour.setLayout(new GridLayout(2, 1));
@@ -49,20 +55,24 @@ public class VueInformations extends JPanel {
 		encartTour.add(tourLabel);
 		encartTour.add(compteurTours);
 		
-		add(encartJoueur1);
+		add(encartsJoueurs.get(partie.getJoueurs()[0]));
 		add(encartTour);
-		add(encartJoueur2);
+		add(encartsJoueurs.get(partie.getJoueurs()[1]));
 	}
 	
-	public void remplirEncartJoueur(JPanel encart, Joueur joueur) {
+	public void remplirEncartJoueur(Joueur joueur) {
 		JLabel labelNom = new JLabel(joueur.getNom());
 		labelNom.setForeground(joueur.getCouleur());
 		labelNom.setFont(font);
-		encart.add(labelNom);
+		encartsJoueurs.get(joueur).add(labelNom);
 	}
 	
 	public void mettreAJourCompteur(int tour, int maxTour, Joueur joueur) {
 		compteurTours.setText((tour+1) + " / " + maxTour);
 		encartTour.setBorder(BorderFactory.createLineBorder(joueur.getCouleur(), 3));
+	}
+	
+	public void mettreAJourVainqueur(Joueur vainqueur) {
+		encartsJoueurs.get(vainqueur).setBackground(Color.yellow);
 	}
 }

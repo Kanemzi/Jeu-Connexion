@@ -18,13 +18,12 @@ public class ModaleNouvellePartie {
 	private boolean ordinateur;
 	private int resultat = JOptionPane.NO_OPTION;
 	
-	
 	public ModaleNouvellePartie(boolean ordi) {
 		ordinateur = ordi;
 		champJoueur1 = new JTextField("Joueur" + (ordinateur ? "" : " 1"));
 		champJoueur2 = new JTextField(ordinateur ? "Bip Boop" : "Joueur 2");
-		champTaillePlateau = new JTextField("6");
-		champValeurMax = new JTextField("3");
+		champTaillePlateau = new JTextField("8");
+		champValeurMax = new JTextField("2");
 		formulaire = new JPanel();
 		
 		formulaire.setLayout(new GridLayout(4, 2));

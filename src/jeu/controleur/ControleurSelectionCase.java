@@ -2,6 +2,7 @@ package jeu.controleur;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.GenericArrayType;
 
 import javax.swing.JOptionPane;
 
@@ -66,7 +67,9 @@ public class ControleurSelectionCase implements ActionListener {
 		vue.getOverlay().setDernierCoup(caseCliquee);
 		
 		if (modele.terminee()) {
-			JOptionPane.showMessageDialog(null, "Partie terminée", "Partie terminée", JOptionPane.INFORMATION_MESSAGE);
+			vue.getInformations().mettreAJourVainqueur(modele.getJoueurs()[0]);
+			int[] points = modele.compterPoints();
+			JOptionPane.showMessageDialog(null, "Partie terminée | rouge: " + points[0] + ", bleu: " + points[1] , "Partie terminée", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			modele.addTour();			
 		}
