@@ -5,7 +5,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import jeu.JeuConnexion;
+import jeu.controleur.ControleurColorerCase;
 import jeu.controleur.ControleurNouvellePartie;
+import jeu.modele.Partie;
 
 public class VueMenuActions extends JMenuBar {
 	
@@ -14,6 +16,9 @@ public class VueMenuActions extends JMenuBar {
 	private JMenuItem optionNouvellePartieOrdinateur;
 	
 	private JMenu menuActions;
+	private JMenuItem optionColorerCase;
+	private JMenuItem optionExisteCheminCases;
+	private JMenuItem optionRelierComposante;
 		
 	public VueMenuActions(JeuConnexion jeu) {
 		optionNouvellePartieJoueur = new JMenuItem("Joueur contre joueur");
@@ -23,13 +28,30 @@ public class VueMenuActions extends JMenuBar {
 		menuNouvellePartie.add(optionNouvellePartieJoueur);
 		menuNouvellePartie.add(optionNouvellePartieOrdinateur);
 		
+		optionColorerCase = new JMenuItem("ColorerCase");
+		optionExisteCheminCases = new JMenuItem("ExisteCheminCases");
+		optionRelierComposante = new JMenuItem("RelierComposante");
 		menuActions = new JMenu("Actions");
+		
+		menuActions.add(optionColorerCase);
+		menuActions.add(optionExisteCheminCases);
+		menuActions.add(optionRelierComposante);
 		
 		add(menuNouvellePartie);
 		add(menuActions);
 		
 		
+		
+		
 		optionNouvellePartieJoueur.addActionListener(new ControleurNouvellePartie(jeu, false));
 		optionNouvellePartieOrdinateur.addActionListener(new ControleurNouvellePartie(jeu, true));
+		
+
+		
+		
+	}
+	
+	public void enregistrerControleurs(Partie partie) {
+		optionColorerCase.addActionListener(new ControleurColorerCase(partie));
 	}
 }

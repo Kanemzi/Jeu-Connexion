@@ -36,6 +36,8 @@ public class JeuConnexion extends JFrame {
 		// partie = new Partie("res/plateaux/exemple.plat", nomJoueur1, nomJoueur2);
 		vue = new VueJeu(partie);
 		
+		menu.enregistrerControleurs(partie);
+		
 		add(vue);
 		pack();
 	}
