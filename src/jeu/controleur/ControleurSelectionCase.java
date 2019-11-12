@@ -2,12 +2,12 @@ package jeu.controleur;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.GenericArrayType;
 
 import javax.swing.JOptionPane;
 
 import jeu.modele.Case;
 import jeu.modele.Joueur;
+import jeu.modele.Ordinateur;
 import jeu.modele.Partie;
 import jeu.vue.BoutonCase;
 import jeu.vue.VueJeu;
@@ -28,7 +28,7 @@ public class ControleurSelectionCase implements ActionListener {
 	public void actionPerformed(ActionEvent ev) {
 		BoutonCase selection = (BoutonCase) ev.getSource();
 		Case caseCliquee = modele.getPlateau().getCase(selection.getCaseX(), selection.getCaseY());
-
+		
 		/**
 		 * Clic sur une case déjà occupée -> on met en surbrillance le groupe sur lequel
 		 * le joueur a cliqué et on affiche le score du groupe
@@ -43,13 +43,23 @@ public class ControleurSelectionCase implements ActionListener {
 					"Information Score", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
-
+		
+		jouerTour(caseCliquee);
+	}
+	
+	/**
+	 * Joue le tour en sélectionnant une certaine case. Si un bot joue le tour, caseCliquee doit être égale à null
+	 * @param caseCliquee
+	 */
+	private void jouerTour(Case caseCliquee) {
 		/**
 		 * Clic sur une case non occupée
 		 */
 		Joueur joueurTour = modele.getJoueurTour();
-
-		modele.getPlateau().ColorerCase(caseCliquee.getX(), caseCliquee.getY(), joueurTour);
+		
+		if (caseCliquee == null) ((Ordinateur) joueurTour).jouer(modele);
+		else joueurTour.jouer(modele, caseCliquee);
+		
 
 		// ------------ debug all cells ------------
 		System.out.println("______________________________________________________");
@@ -97,6 +107,10 @@ public class ControleurSelectionCase implements ActionListener {
 
 		} else {
 			modele.addTour();
+			joueurTour = modele.getJoueurTour();
+			if (joueurTour.isOrdinateur()) {
+				jouerTour(null);
+			}
 		}
 
 		/**

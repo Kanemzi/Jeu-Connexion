@@ -7,13 +7,15 @@ import javax.swing.JMenuItem;
 import jeu.JeuConnexion;
 import jeu.controleur.ControleurColorerCase;
 import jeu.controleur.ControleurNouvellePartie;
+import jeu.controleur.ControleurSauvegarderPartie;
 import jeu.modele.Partie;
 
 public class VueMenuActions extends JMenuBar {
 	
-	private JMenu menuNouvellePartie;
+	private JMenu menuPartie;
 	private JMenuItem optionNouvellePartieJoueur;
 	private JMenuItem optionNouvellePartieOrdinateur;
+	private JMenuItem optionSauvegarderPartie;
 	
 	private JMenu menuActions;
 	private JMenuItem optionColorerCase;
@@ -23,10 +25,13 @@ public class VueMenuActions extends JMenuBar {
 	public VueMenuActions(JeuConnexion jeu) {
 		optionNouvellePartieJoueur = new JMenuItem("Joueur contre joueur");
 		optionNouvellePartieOrdinateur = new JMenuItem("Joueur contre ordinateur");
-		menuNouvellePartie = new JMenu("Nouvelle partie");
+		optionSauvegarderPartie = new JMenuItem("Sauvegarder la partie");
+		menuPartie = new JMenu("Partie");
 		
-		menuNouvellePartie.add(optionNouvellePartieJoueur);
-		menuNouvellePartie.add(optionNouvellePartieOrdinateur);
+		menuPartie.add(optionNouvellePartieJoueur);
+		menuPartie.add(optionNouvellePartieOrdinateur);
+		menuPartie.add(optionSauvegarderPartie);
+		optionSauvegarderPartie.setEnabled(false);
 		
 		optionColorerCase = new JMenuItem("ColorerCase");
 		optionExisteCheminCases = new JMenuItem("ExisteCheminCases");
@@ -37,21 +42,17 @@ public class VueMenuActions extends JMenuBar {
 		menuActions.add(optionExisteCheminCases);
 		menuActions.add(optionRelierComposante);
 		
-		add(menuNouvellePartie);
+		add(menuPartie);
 		add(menuActions);
 		
-		
-		
-		
 		optionNouvellePartieJoueur.addActionListener(new ControleurNouvellePartie(jeu, false));
-		optionNouvellePartieOrdinateur.addActionListener(new ControleurNouvellePartie(jeu, true));
-		
-
-		
-		
+		optionNouvellePartieOrdinateur.addActionListener(new ControleurNouvellePartie(jeu, true));		
 	}
 	
 	public void enregistrerControleurs(Partie partie) {
+		optionSauvegarderPartie.setEnabled(true);
+		
 		optionColorerCase.addActionListener(new ControleurColorerCase(partie));
+		optionSauvegarderPartie.addActionListener(new ControleurSauvegarderPartie(partie));
 	}
 }

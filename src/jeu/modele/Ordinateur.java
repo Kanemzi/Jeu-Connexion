@@ -1,33 +1,48 @@
 package jeu.modele;
 
 import java.awt.Color;
+import java.util.List;
+import java.util.Map;
 
-public class Ordinateur {
+public class Ordinateur extends Joueur {
 	
-	private Color couleur;
-	private String nom;
-	private int id;
+	// memoire de l'IA
+	private Map<Case, Case> coupUrgents; // coup à jouer le plus vite possible (protection de coupes)
+	private List<Case> coupsImportants; // coups à jouer de préférence avant l'adversaire (coupe de deux groupes)
 	
 	public Ordinateur(int id, String nom, Color couleur) {
-		this.id = id;
-		this.nom = nom;
-		this.couleur = couleur;
-	}
-
-	public Color getCouleur() {
-		return couleur;
+		super(id, nom, couleur);
+		this.ordinateur = true;
 	}
 	
-	public String getNom() {
-		return nom;
+	/**
+	 * Permet à l'ordinateur de jouer un coup sur le plateau
+	 * @param partie la partie en cours
+	 */
+	public void jouer(Partie partie) {
+		Case coup = choisirCoup(partie);
+		super.jouer(partie, coup);
 	}
 	
-	public int getId() {
-		return id;
-	}
-	
+	/**
+	 * Choisit le prochain coup à jouer
+	 * @param partie la partie en cours
+	 * @return la case à jouer
+	 */
 	public Case choisirCoup(Partie partie) {
-		
+		if (partie.getTour() <= 1) {
+			return choisirPremierCoup(partie.getPlateau());
+		}
+		return null;
+	}
+	
+	/**
+	 * Choisit le premier coup à jouer.
+	 * Le premier coup est très important et peut être décisif, il possède donc une fonction dédiée.
+	 * @param plateau le plateau du jeu
+	 * @return le premier coup à jouer
+	 */
+	public Case choisirPremierCoup(Plateau plateau) {
 		return null;
 	}
 }

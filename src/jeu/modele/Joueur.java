@@ -4,14 +4,20 @@ import java.awt.Color;
 
 public class Joueur {
 	
-	private Color couleur;
-	private String nom;
-	private int id;
+	protected Color couleur;
+	protected String nom;
+	protected int id;
+	protected boolean ordinateur;
 	
 	public Joueur(int id, String nom, Color couleur) {
 		this.id = id;
 		this.nom = nom;
 		this.couleur = couleur;
+		this.ordinateur = false;
+	}
+	
+	public void jouer(Partie partie, Case cliquee) {
+		partie.getPlateau().ColorerCase(cliquee.getX(), cliquee.getY(), this);
 	}
 
 	public Color getCouleur() {
@@ -24,5 +30,9 @@ public class Joueur {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public boolean isOrdinateur() {
+		return ordinateur;
 	}
 }

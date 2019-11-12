@@ -217,6 +217,10 @@ public class Plateau {
 	public int getTaille() {
 		return n;
 	}
+	
+	public int getMax() {
+		return max;
+	}
 
 	public List<Case> getCases() {
 		return cases;
