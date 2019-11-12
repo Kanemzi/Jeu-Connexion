@@ -109,7 +109,7 @@ public class Plateau {
 		Case representant1 = c1.classe();
 		Case representant2 = c2.classe();
 		
-		if (c1.getProprietaire() != c2.getProprietaire() && c1.getProprietaire() != proprietaire) 
+		if (c1.getProprietaire() != c2.getProprietaire() || c1.getProprietaire() != proprietaire) 
 			return new Case[] {representant1, representant2};
 		
 		return (representant1 != representant2) ? new Case[] {representant1, representant2} : null;
