@@ -1,7 +1,5 @@
 package jeu.modele.analyse;
 
-import java.util.Vector;
-
 public class PoidsPlateau {
 	public int poids[][];
 	public int poidsMax;
@@ -9,5 +7,6 @@ public class PoidsPlateau {
 	
 	public PoidsPlateau(int taille) {
 		poids = new int[taille][taille];
+		poidsMax = -1;
 	}
 }

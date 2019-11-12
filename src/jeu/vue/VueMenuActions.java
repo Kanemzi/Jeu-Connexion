@@ -1,5 +1,7 @@
 package jeu.vue;
 
+import java.awt.event.KeyEvent;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -25,9 +27,15 @@ public class VueMenuActions extends JMenuBar {
 		
 	public VueMenuActions(JeuConnexion jeu) {
 		optionNouvellePartieJoueur = new JMenuItem("Joueur contre joueur");
+		optionNouvellePartieJoueur.setMnemonic(KeyEvent.VK_J);
+		
 		optionNouvellePartieOrdinateur = new JMenuItem("Joueur contre ordinateur");
+		optionNouvellePartieOrdinateur.setMnemonic(KeyEvent.VK_O);
+		
 		optionSauvegarderPartie = new JMenuItem("Sauvegarder la partie");
+		
 		menuPartie = new JMenu("Partie");
+		menuPartie.setMnemonic(KeyEvent.VK_P);
 		
 		menuPartie.add(optionNouvellePartieJoueur);
 		menuPartie.add(optionNouvellePartieOrdinateur);

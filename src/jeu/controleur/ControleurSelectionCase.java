@@ -12,7 +12,7 @@ import jeu.modele.Case;
 import jeu.modele.Joueur;
 import jeu.modele.Ordinateur;
 import jeu.modele.Partie;
-import jeu.modele.analyse.PlateauUtils;
+import jeu.modele.analyse.AnalyseUtils;
 import jeu.vue.BoutonCase;
 import jeu.vue.VueJeu;
 
@@ -33,7 +33,7 @@ public class ControleurSelectionCase implements ActionListener {
 		BoutonCase selection = (BoutonCase) ev.getSource();
 		Case caseCliquee = modele.getPlateau().getCase(selection.getCaseX(), selection.getCaseY());
 
-		System.out.println("NIVEAU : " + PlateauUtils.hauteurCase(modele.getPlateau(), caseCliquee));
+		System.out.println("NIVEAU : " + AnalyseUtils.hauteurCase(modele.getPlateau(), caseCliquee));
 		
 		/**
 		 * Clic sur une case déjà occupée -> on met en surbrillance le groupe sur lequel

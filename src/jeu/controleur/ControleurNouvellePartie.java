@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import jeu.JeuConnexion;
+import jeu.modele.Partie;
 import jeu.vue.modales.ModaleNouvellePartie;
 
 public class ControleurNouvellePartie implements ActionListener {
@@ -24,9 +25,13 @@ public class ControleurNouvellePartie implements ActionListener {
 		parametres.afficher();
 		if (!parametres.valide()) return;
 		
-		if (ordinateur)
-			jeu.JouerOrdiHumain(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax(), true);
-		else 
+		if (ordinateur) {
+			Partie p = jeu.JouerOrdiHumain(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax(), parametres.isOrdinateurCommence());
+			if (parametres.isOrdinateurCommence()) {
+				p.jouerTour(null, jeu.getVue());
+			}
+		} else 
 			jeu.JouerDeuxHumains(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax());
+		
 	}
 }
