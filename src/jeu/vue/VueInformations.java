@@ -4,14 +4,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -23,6 +21,7 @@ public class VueInformations extends JPanel {
 	private static Font font = new Font("sans-serif", Font.PLAIN, 20);	
 	
 	private Map<Joueur, JPanel> encartsJoueurs;
+	private List<JLabel> scoresJoueurs;
 	private JPanel encartTour;
 	private JLabel compteurTours;
 	private VueJeu parent;
@@ -31,7 +30,8 @@ public class VueInformations extends JPanel {
 		this.parent = parent;
 		Dimension size = getPreferredSize();
 		size.height = 96;
-		encartsJoueurs = new HashMap<>();
+		encartsJoueurs = new HashMap<>(2);
+		scoresJoueurs = new ArrayList<>(2);
 		setPreferredSize(size);
 		setBorder(BorderFactory.createMatteBorder(0, 0, 4, 0, Color.gray));
 
@@ -52,6 +52,7 @@ public class VueInformations extends JPanel {
 		JLabel tourLabel = new JLabel("Tour :");
 		tourLabel.setHorizontalAlignment(JLabel.CENTER);
 		compteurTours.setHorizontalAlignment(JLabel.CENTER);
+		
 		encartTour.add(tourLabel);
 		encartTour.add(compteurTours);
 		
@@ -64,7 +65,17 @@ public class VueInformations extends JPanel {
 		JLabel labelNom = new JLabel(joueur.getNom());
 		labelNom.setForeground(joueur.getCouleur());
 		labelNom.setFont(font);
+		labelNom.setHorizontalAlignment(JLabel.CENTER);
+		
+		JLabel labelScore = new JLabel("0");
+		labelScore.setFont(font.deriveFont(40.0f).deriveFont(Font.BOLD));
+		labelScore.setHorizontalAlignment(JLabel.CENTER);
+		
+		scoresJoueurs.add(labelScore);
+		
+		encartsJoueurs.get(joueur).setLayout(new GridLayout(2, 1));
 		encartsJoueurs.get(joueur).add(labelNom);
+		encartsJoueurs.get(joueur).add(labelScore);
 	}
 	
 	public void mettreAJourCompteur(int tour, int maxTour, Joueur joueur) {
@@ -74,5 +85,12 @@ public class VueInformations extends JPanel {
 	
 	public void mettreAJourVainqueur(Joueur vainqueur) {
 		encartsJoueurs.get(vainqueur).setBackground(Color.yellow);
+	}
+	
+	public void mettreAJourScores(int[] scores) {
+		int nombreJoueurs = scores.length;
+		for (int i = 0; i < nombreJoueurs; i++) {
+			scoresJoueurs.get(i).setText("" + scores[i]);
+		}
 	}
 }
