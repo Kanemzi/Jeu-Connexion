@@ -6,6 +6,7 @@ import javax.swing.JMenuItem;
 
 import jeu.JeuConnexion;
 import jeu.controleur.ControleurColorerCase;
+import jeu.controleur.ControleurExisteCheminCases;
 import jeu.controleur.ControleurNouvellePartie;
 import jeu.modele.Partie;
 
@@ -39,19 +40,19 @@ public class VueMenuActions extends JMenuBar {
 		
 		add(menuNouvellePartie);
 		add(menuActions);
-		
-		
-		
+	
 		
 		optionNouvellePartieJoueur.addActionListener(new ControleurNouvellePartie(jeu, false));
 		optionNouvellePartieOrdinateur.addActionListener(new ControleurNouvellePartie(jeu, true));
 		
-
+		
 		
 		
 	}
 	
 	public void enregistrerControleurs(Partie partie) {
 		optionColorerCase.addActionListener(new ControleurColorerCase(partie));
+		
+		optionExisteCheminCases.addActionListener(new ControleurExisteCheminCases(partie));
 	}
 }

@@ -60,14 +60,10 @@ public class ModaleColorerCase {
 		return y >= 1 ? y-1 : 0;
 	}
 	public int getProprietaire() {
-		int couleur;
-		if(rouge.isSelected()) {
-			couleur = 0;
-		}else {
-			couleur = 1;
-		}
-		return couleur;
+		return rouge.isSelected() ? 0 : 1;
 	}
+	
+	
 }
 
 
