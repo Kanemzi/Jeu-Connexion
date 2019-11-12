@@ -7,12 +7,14 @@ public class Partie {
 	private Plateau plateau;
 	private Joueur[] joueurs;
 	
+	private int[] points;
+	
 	private int tour;
 	private int maxTours;
 	
 	public Partie() {
 		tour = 0;
-		joueurs = new Joueur[2];	
+		joueurs = new Joueur[2];
 	}
 
 	public Partie(int n, int max, String nom1, String nom2) {
@@ -85,6 +87,8 @@ public class Partie {
 			if( pointsComposante > points[idJoueur])
 				points[idJoueur] = pointsComposante;
 		}
+		
+		this.points = points;
 		
 		return points;
 	}

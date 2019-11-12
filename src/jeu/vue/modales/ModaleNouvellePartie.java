@@ -2,6 +2,7 @@ package jeu.vue.modales;
 
 import java.awt.GridLayout;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,6 +16,7 @@ public class ModaleNouvellePartie {
 	private JTextField champJoueur2;
 	private JTextField champTaillePlateau;
 	private JTextField champValeurMax;
+	private JCheckBox ordinateurCommence;
 	private boolean ordinateur;
 	private int resultat = JOptionPane.NO_OPTION;
 	
@@ -26,13 +28,19 @@ public class ModaleNouvellePartie {
 		champValeurMax = new JTextField("2");
 		formulaire = new JPanel();
 		
-		formulaire.setLayout(new GridLayout(4, 2));
+		formulaire.setLayout(new GridLayout(5, 2));
 
 		formulaire.add(new JLabel(ordi ? "Nom joueur" : "Nom joueur 1" + ":"));
 		formulaire.add(champJoueur1);
 		
 		formulaire.add(new JLabel(ordi ? "Nom ordinateur" : "Nom joueur 2" + ":"));
 		formulaire.add(champJoueur2);
+		
+		if (ordinateur) {
+			ordinateurCommence = new JCheckBox("L'Ordinateur commence");
+			formulaire.add(ordinateurCommence);
+			formulaire.add(new JLabel(""));
+		}
 		
 		formulaire.add(new JLabel("Taille (n) :"));
 		formulaire.add(champTaillePlateau);
@@ -67,5 +75,9 @@ public class ModaleNouvellePartie {
 	public int getValeurMax() {
 		int max = Integer.parseInt(champValeurMax.getText());
 		return max < 1 ? 1 : max; 
+	}
+	
+	public boolean isOrdinateurCommence() {
+		return ordinateur && ordinateurCommence.isSelected();
 	}
 }

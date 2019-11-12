@@ -67,12 +67,13 @@ public class ControleurSelectionCase implements ActionListener {
 
 		vue.getOverlay().setDernierCoup(caseCliquee);
 
+		int[] points = modele.compterPoints();
+		vue.getInformations().mettreAJourScores(points);
+		
 		/**
 		 * Le dernier coup vient d'être joué
 		 */
 		if (modele.terminee()) {
-			int[] points = modele.compterPoints();
-
 			// id du joueur qui vient de gagner la partie, si égalité, l'id est négatif
 			int idgagnant = (points[0] > points[1]) ? 0 : (points[1] > points[0]) ? 1 : -1;
 
