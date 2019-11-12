@@ -1,7 +1,13 @@
 package jeu.modele;
 
 import java.awt.Color;
-import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.swing.JOptionPane;
+
+import jeu.Config;
+import jeu.vue.VueJeu;
 
 public class Partie {
 	private Plateau plateau;
@@ -11,24 +17,43 @@ public class Partie {
 	
 	private int tour;
 	private int maxTours;
+	private int decalageTour;
 	
 	public Partie() {
 		tour = 0;
 		joueurs = new Joueur[2];
 	}
 
-	public Partie(int n, int max, String nom1, String nom2) {
+	public Partie(int n, int max, String nom1, String nom2, boolean ordinateur, int decalageTour) {
+		this(n, max, nom1, nom2, ordinateur);
+		this.decalageTour = decalageTour;
+	}
+	
+	public Partie(String nomFichier, String nom1, String nom2, boolean ordinateur, int decalageTour) {
+		this(nomFichier, nom1, nom2, ordinateur);
+		this.decalageTour = decalageTour;
+	}
+	
+	public Partie(int n, int max, String nom1, String nom2, boolean ordinateur) {
 		this();
 		joueurs[0] = new Joueur(0, nom1, Color.red);
-		joueurs[1] = new Joueur(1, nom2, Color.blue);		
+		if (ordinateur) {
+			joueurs[1] = new Ordinateur(1, nom2, Color.BLUE);
+		} else {
+			joueurs[1] = new Joueur(1, nom2, Color.blue);					
+		}
 		plateau = new Plateau().RemplirGrilleAleatoire(n, max);
 		maxTours = plateau.getTaille() * plateau.getTaille();
 	}
 	
-	public Partie(String nomFichier, String nom1, String nom2) {
+	public Partie(String nomFichier, String nom1, String nom2, boolean ordinateur) {
 		this();
 		joueurs[0] = new Joueur(0, nom1, Color.red);
-		joueurs[1] = new Joueur(1, nom2, Color.blue);		
+		if (ordinateur) {
+			joueurs[1] = new Ordinateur(1, nom2, Color.BLUE);
+		} else {
+			joueurs[1] = new Joueur(1, nom2, Color.blue);					
+		}
 		plateau = new Plateau().RemplirGrilleFichier(nomFichier, joueurs);
 		tour = plateau.getPlacees();
 		maxTours = plateau.getTaille() * plateau.getTaille();
@@ -50,7 +75,7 @@ public class Partie {
 	}
 	
 	public Joueur getJoueurTour() {
-		return joueurs[tour % joueurs.length];
+		return joueurs[(tour + decalageTour) % joueurs.length];
 	}
 	
 	public int getTour() {
@@ -67,6 +92,95 @@ public class Partie {
 	
 	public boolean terminee() {
 		return tour >= maxTours - 1;
+	}
+	
+	/**
+	 * Joue le tour en sélectionnant une certaine case. Si un bot joue le tour,
+	 * caseCliquee doit être égale à null.
+	 * 
+	 * La fonction met également à jour les différentes vues du jeu
+	 * 
+	 * @param caseCliquee
+	 * @param vue la vue du jeu à mettre à jour
+	 */
+	public void jouerTour(Case caseCliquee, final VueJeu vue) {
+		/**
+		 * Clic sur une case non occupée
+		 */
+		Joueur joueurTour = getJoueurTour();
+
+		if (caseCliquee == null)
+			caseCliquee = ((Ordinateur) joueurTour).jouer(this);
+		else
+			joueurTour.jouer(this, caseCliquee);
+
+		// ------------ debug all cells ------------
+		/**
+		System.out.println("______________________________________________________");
+		for (Case c : modele.getPlateau().getCases()) {
+			System.out.println(c + " ##### parent: " + c.getParent() + " ##### enfants: " + c.getEnfants());
+		}
+		System.out.println("_ _ _ _ _ ");
+		System.out.println(
+				"composante : " + modele.getPlateau().AfficherComposante(caseCliquee.getX(), caseCliquee.getY()));
+		System.out.println("score : " + modele.getPlateau().AfficherScore(caseCliquee.getX(), caseCliquee.getY())); 
+		**/
+		// -----------------------------------------
+
+		vue.getOverlay()
+				.setCasesSurbrillances(getPlateau().AfficherComposante(caseCliquee.getX(), caseCliquee.getY()));
+
+		vue.getOverlay().setDernierCoup(caseCliquee);
+
+		int[] points = compterPoints();
+		vue.getInformations().mettreAJourScores(points);
+
+		/**
+		 * Le dernier coup vient d'être joué
+		 */
+		if (terminee()) {
+			// id du joueur qui vient de gagner la partie, si égalité, l'id est négatif
+			int idgagnant = (points[0] > points[1]) ? 0 : (points[1] > points[0]) ? 1 : -1;
+
+			String affichageScores = getJoueurs()[0].getNom() + " : " + points[0] + " points\n"
+					+ getJoueurs()[1].getNom() + " : " + points[1] + " points";
+
+			if (idgagnant < 0) {
+				vue.getInformations().mettreAJourVainqueur(getJoueurs()[0]);
+				vue.getInformations().mettreAJourVainqueur(getJoueurs()[1]);
+
+				JOptionPane.showMessageDialog(null, "Partie terminée à égalité ! \n\n" + affichageScores,
+						"Partie terminée", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				Joueur gagnant = getJoueurs()[idgagnant];
+				vue.getInformations().mettreAJourVainqueur(gagnant);
+
+				JOptionPane.showMessageDialog(null, gagnant.getNom() + " gagne la partie ! \n\n" + affichageScores,
+						"Partie terminée", JOptionPane.INFORMATION_MESSAGE);
+			}
+
+		} else {
+			addTour();
+			joueurTour = getJoueurTour();
+
+			/**
+			 * Simuler un délai de réflexion pour l'ordinateur pour laisser le temps au
+			 * joueur d'examiner le jeu
+			 */
+			if (joueurTour.isOrdinateur()) {
+				new Timer().schedule(new TimerTask() {
+					public void run() {
+						jouerTour(null, vue);
+					}
+				}, Config.TEMPS_REPONSE_ORDINATEUR);
+			}
+		}
+
+		/**
+		 * Mettre à jour le compteur de tours et l'affichage du joueur qui doit jouer le
+		 * prochain coup
+		 */
+		vue.getInformations().mettreAJourCompteur(getTour(), getMaxTour(), getJoueurTour());
 	}
 	
 	/**

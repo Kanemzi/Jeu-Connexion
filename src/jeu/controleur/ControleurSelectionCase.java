@@ -2,13 +2,17 @@ package jeu.controleur;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
+import jeu.Config;
 import jeu.modele.Case;
 import jeu.modele.Joueur;
 import jeu.modele.Ordinateur;
 import jeu.modele.Partie;
+import jeu.modele.analyse.PlateauUtils;
 import jeu.vue.BoutonCase;
 import jeu.vue.VueJeu;
 
@@ -28,6 +32,8 @@ public class ControleurSelectionCase implements ActionListener {
 	public void actionPerformed(ActionEvent ev) {
 		BoutonCase selection = (BoutonCase) ev.getSource();
 		Case caseCliquee = modele.getPlateau().getCase(selection.getCaseX(), selection.getCaseY());
+
+		System.out.println("NIVEAU : " + PlateauUtils.hauteurCase(modele.getPlateau(), caseCliquee));
 		
 		/**
 		 * Clic sur une case déjà occupée -> on met en surbrillance le groupe sur lequel
@@ -43,80 +49,19 @@ public class ControleurSelectionCase implements ActionListener {
 					"Information Score", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
-		
-		jouerTour(caseCliquee);
-	}
-	
-	/**
-	 * Joue le tour en sélectionnant une certaine case. Si un bot joue le tour, caseCliquee doit être égale à null
-	 * @param caseCliquee
-	 */
-	private void jouerTour(Case caseCliquee) {
+
 		/**
-		 * Clic sur une case non occupée
+		 * On ne laisse pas le jouer cliquer sur une case vide si c'est au tour du bot
 		 */
 		Joueur joueurTour = modele.getJoueurTour();
-		
-		if (caseCliquee == null) ((Ordinateur) joueurTour).jouer(modele);
-		else joueurTour.jouer(modele, caseCliquee);
-		
+		if (joueurTour.isOrdinateur()) {
+			JOptionPane.showMessageDialog(null,
+					"L'ordinateur est en train de réfléchir...\nVeuillez attendre avant de jouer", "Connexion",
+					JOptionPane.ERROR_MESSAGE);
 
-		// ------------ debug all cells ------------
-		System.out.println("______________________________________________________");
-		for (Case c : modele.getPlateau().getCases()) {
-			System.out.println(c + " ##### parent: " + c.getParent() + " ##### enfants: " + c.getEnfants());
-		}
-		System.out.println("_ _ _ _ _ ");
-		System.out.println(
-				"composante : " + modele.getPlateau().AfficherComposante(caseCliquee.getX(), caseCliquee.getY()));
-		System.out.println("score : " + modele.getPlateau().AfficherScore(caseCliquee.getX(), caseCliquee.getY()));
-		// -----------------------------------------
-
-		vue.getOverlay()
-				.setCasesSurbrillances(modele.getPlateau().AfficherComposante(caseCliquee.getX(), caseCliquee.getY()));
-
-		vue.getOverlay().setDernierCoup(caseCliquee);
-
-		int[] points = modele.compterPoints();
-		vue.getInformations().mettreAJourScores(points);
-		
-		/**
-		 * Le dernier coup vient d'être joué
-		 */
-		if (modele.terminee()) {
-			// id du joueur qui vient de gagner la partie, si égalité, l'id est négatif
-			int idgagnant = (points[0] > points[1]) ? 0 : (points[1] > points[0]) ? 1 : -1;
-
-			String affichageScores = modele.getJoueurs()[0].getNom() + " : " + points[0] + " points\n"
-					+ modele.getJoueurs()[1].getNom() + " : " + points[1] + " points";
-			
-			if (idgagnant < 0) {
-				vue.getInformations().mettreAJourVainqueur(modele.getJoueurs()[0]);
-				vue.getInformations().mettreAJourVainqueur(modele.getJoueurs()[1]);
-				
-				JOptionPane.showMessageDialog(null,
-						"Partie terminée à égalité ! \n\n" + affichageScores,
-						"Partie terminée", JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				Joueur gagnant = modele.getJoueurs()[idgagnant];
-				vue.getInformations().mettreAJourVainqueur(gagnant);
-
-				JOptionPane.showMessageDialog(null, gagnant.getNom() + " gagne la partie ! \n\n" + affichageScores,
-						"Partie terminée", JOptionPane.INFORMATION_MESSAGE);
-			}
-
-		} else {
-			modele.addTour();
-			joueurTour = modele.getJoueurTour();
-			if (joueurTour.isOrdinateur()) {
-				jouerTour(null);
-			}
+			return;
 		}
 
-		/**
-		 * Mettre à jour le compteur de tours et l'affichage du joueur qui doit jouer le
-		 * prochain coup
-		 */
-		vue.getInformations().mettreAJourCompteur(modele.getTour(), modele.getMaxTour(), modele.getJoueurTour());
+		modele.jouerTour(caseCliquee, vue);
 	}
 }

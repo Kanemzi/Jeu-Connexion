@@ -16,8 +16,9 @@ public class Joueur {
 		this.ordinateur = false;
 	}
 	
-	public void jouer(Partie partie, Case cliquee) {
+	public Case jouer(Partie partie, Case cliquee) {
 		partie.getPlateau().ColorerCase(cliquee.getX(), cliquee.getY(), this);
+		return cliquee;
 	}
 
 	public Color getCouleur() {

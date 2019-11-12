@@ -24,6 +24,9 @@ public class ControleurNouvellePartie implements ActionListener {
 		parametres.afficher();
 		if (!parametres.valide()) return;
 		
-		jeu.JouerDeuxHumains(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax());
+		if (ordinateur)
+			jeu.JouerOrdiHumain(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax(), true);
+		else 
+			jeu.JouerDeuxHumains(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax());
 	}
 }
