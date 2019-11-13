@@ -10,6 +10,7 @@ import jeu.JeuConnexion;
 import jeu.controleur.ControleurColorerCase;
 import jeu.controleur.ControleurExisteCheminCases;
 import jeu.controleur.ControleurNouvellePartie;
+import jeu.controleur.ControleurRelierComposantes;
 import jeu.controleur.ControleurSauvegarderPartie;
 import jeu.modele.Partie;
 
@@ -23,7 +24,7 @@ public class VueMenuActions extends JMenuBar {
 	private JMenu menuActions;
 	private JMenuItem optionColorerCase;
 	private JMenuItem optionExisteCheminCases;
-	private JMenuItem optionRelierComposante;
+	private JMenuItem optionRelierComposantes;
 		
 	public VueMenuActions(JeuConnexion jeu) {
 		optionNouvellePartieJoueur = new JMenuItem("Joueur contre joueur");
@@ -44,12 +45,12 @@ public class VueMenuActions extends JMenuBar {
 		
 		optionColorerCase = new JMenuItem("ColorerCase");
 		optionExisteCheminCases = new JMenuItem("ExisteCheminCases");
-		optionRelierComposante = new JMenuItem("RelierComposante");
+		optionRelierComposantes = new JMenuItem("RelierComposante");
 		menuActions = new JMenu("Actions");
 		
 		menuActions.add(optionColorerCase);
 		menuActions.add(optionExisteCheminCases);
-		menuActions.add(optionRelierComposante);
+		menuActions.add(optionRelierComposantes);
 		
 		add(menuPartie);
 		add(menuActions);
@@ -64,5 +65,7 @@ public class VueMenuActions extends JMenuBar {
 		optionColorerCase.addActionListener(new ControleurColorerCase(partie));
 		optionSauvegarderPartie.addActionListener(new ControleurSauvegarderPartie(partie));
 		optionExisteCheminCases.addActionListener(new ControleurExisteCheminCases(partie));
+		optionRelierComposantes.addActionListener(new ControleurRelierComposantes(partie));
+		
 	}
 }
