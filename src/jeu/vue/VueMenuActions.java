@@ -21,8 +21,9 @@ public class VueMenuActions extends JMenuBar {
 	private JMenuItem optionNouvellePartieJoueur;
 	private JMenuItem optionNouvellePartieOrdinateur;
 	private JMenuItem optionSauvegarderPartie;
-	private JMenuItem optionChargerPartie;
-	
+	private JMenuItem optionChargerPartieJoueur;
+	private JMenuItem optionChargerPartieOrdinateur;
+
 	private JMenu menuActions;
 	private JMenuItem optionColorerCase;
 	private JMenuItem optionExisteCheminCases;
@@ -36,7 +37,8 @@ public class VueMenuActions extends JMenuBar {
 		optionNouvellePartieOrdinateur.setMnemonic(KeyEvent.VK_O);
 		
 		optionSauvegarderPartie = new JMenuItem("Sauvegarder la partie");
-		optionChargerPartie = new JMenuItem("Charger une partie");
+		optionChargerPartieJoueur = new JMenuItem("Charger une partie contre joueur");
+		optionChargerPartieOrdinateur = new JMenuItem("Charger une partie contre ordinateur");
 		
 		menuPartie = new JMenu("Partie");
 		menuPartie.setMnemonic(KeyEvent.VK_P);
@@ -44,7 +46,8 @@ public class VueMenuActions extends JMenuBar {
 		menuPartie.add(optionNouvellePartieJoueur);
 		menuPartie.add(optionNouvellePartieOrdinateur);
 		menuPartie.add(optionSauvegarderPartie);
-		menuPartie.add(optionChargerPartie);
+		menuPartie.add(optionChargerPartieJoueur);
+		menuPartie.add(optionChargerPartieOrdinateur);
 		optionSauvegarderPartie.setEnabled(false);
 		
 		optionColorerCase = new JMenuItem("ColorerCase");
@@ -61,7 +64,8 @@ public class VueMenuActions extends JMenuBar {
 
 		optionNouvellePartieJoueur.addActionListener(new ControleurNouvellePartie(jeu, false));
 		optionNouvellePartieOrdinateur.addActionListener(new ControleurNouvellePartie(jeu, true));
-		optionChargerPartie.addActionListener(new ControleurChargerPartie(jeu, false));
+		optionChargerPartieJoueur.addActionListener(new ControleurChargerPartie(jeu, false));
+		optionChargerPartieOrdinateur.addActionListener(new ControleurChargerPartie(jeu, true));
 	}
 	
 	public void enregistrerControleurs(Partie partie) {
