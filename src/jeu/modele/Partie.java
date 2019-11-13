@@ -1,12 +1,14 @@
 package jeu.modele;
 
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
 import jeu.Config;
+import jeu.modele.analyse.AnalyseUtils;
 import jeu.vue.VueJeu;
 
 public class Partie {
@@ -47,6 +49,8 @@ public class Partie {
 		}
 		plateau = new Plateau().RemplirGrilleAleatoire(n, max);
 		maxTours = plateau.getTaille() * plateau.getTaille();
+		
+		System.out.println("poids : " +Arrays.toString(AnalyseUtils.calculerPoidsQuarts(this.getPlateau(), Config.COEF_BORDURES_GRAND)));
 	}
 	
 	public Partie(String nomFichier, String nom1, String nom2, boolean ordinateur) {

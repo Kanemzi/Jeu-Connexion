@@ -1,5 +1,6 @@
 package jeu.modele.analyse;
 
+import jeu.Config;
 import jeu.modele.Case;
 import jeu.modele.Plateau;
 
@@ -80,7 +81,10 @@ public class AnalyseUtils {
 		float poids = 0;
 		for (int x = x0; x <= x1; x++) {
 			for (int y = y0; y <= y1; y++) {
-				poids += p.getCase(x, y).getValeur();
+				Case c = p.getCase(x, y);
+				float valeur = (float) c.getValeur();
+				if (hauteurCase(p, c) == 0) valeur *= coefBordures;
+				poids += valeur;
 			}
 		}
 		return poids;
@@ -88,15 +92,27 @@ public class AnalyseUtils {
 
 	/**
 	 * Calcule le poids des quarts du plateau 
+	 * O(n) : avec n le nombre de cases sur le plateau
 	 * @param p
 	 * @return
 	 */
-	public static float[] calculerPoidsQuarts(Plateau p) {
-		float[] poidsQuarts = new int[4];
+	public static float[] calculerPoidsQuarts(Plateau p, float coefBordures) {
+		int taille = p.getTaille();
+		int parite = 1 - taille % 2;
+		int centre = taille / 2 - parite;
+		float[] poidsQuarts = new float[4];
+		
+		System.out.println("taille: " + taille);
+		System.out.println("centre: " + centre);
+		System.out.println("parite: " + parite);
 		
 		
+		poidsQuarts[0] = calculerPoidsZone(p, 0, 0, centre, centre, coefBordures);
+		poidsQuarts[1] = calculerPoidsZone(p, centre + parite, 0, taille - 1, centre, coefBordures);	
+		poidsQuarts[2] = calculerPoidsZone(p, 0, centre + parite, centre, taille - 1, coefBordures);	
+		poidsQuarts[3] = calculerPoidsZone(p, centre + parite, centre + parite, taille - 1, taille - 1, coefBordures);	
 		
-		return poidsQuarts
+		return poidsQuarts;
 	}
 
 }

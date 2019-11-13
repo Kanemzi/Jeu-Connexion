@@ -38,10 +38,10 @@ public class JeuConnexion extends JFrame {
 		//partie = new Partie("res/plateaux/Joueur 1-Joueur 2-1573566204059.cnx", nomJoueur1, nomJoueur2);
 		vue = new VueJeu(partie);
 		
-		int[][] poids = AnalyseUtils.calculerPoidsPlateau(partie.getPlateau()).poids;
-		//for (int x = 0; x < poids[0].length; x++) {
-			System.out.println(Arrays.deepToString(poids));
-		//}
+		float[][] poids = AnalyseUtils.calculerPoidsPlateau(partie.getPlateau()).poids;
+		for (int x = 0; x < poids[0].length; x++) {
+			System.out.println(Arrays.toString(poids[x]));
+		}
 		
 		menu.enregistrerControleurs(partie);
 		
