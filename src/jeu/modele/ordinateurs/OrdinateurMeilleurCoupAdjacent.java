@@ -1,4 +1,4 @@
-package jeu.modele;
+package jeu.modele.ordinateurs;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -13,10 +13,13 @@ import java.util.Set;
 import java.util.Stack;
 
 import jeu.Config;
+import jeu.modele.Case;
+import jeu.modele.Joueur;
+import jeu.modele.Partie;
 import jeu.modele.analyse.AnalyseUtils;
 import jeu.modele.analyse.PoidsPlateau;
 
-public class Ordinateur extends Joueur {
+public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 
 	enum Etat {
 		INFLUENCE, // L'ordinateur cherche à se développer au maximum sur le plateau et à réduire
@@ -25,52 +28,25 @@ public class Ordinateur extends Joueur {
 					// en réduisant l'intérieur du territoire adversaire si cela vaut plus de points
 	}
 
-	private Etat etat;
+	protected Etat etat;
 
 	// memoire de l'IA
-	private Map<Case, Case> coupsUrgents; // coup à jouer le plus vite possible (protection de coupes)
-	private List<Case> coupsImportants; // coups à jouer de préférence avant l'adversaire (coupe de deux groupes)
-	private Set<Case> coupsRestants; // l'ensemble des cases encore vides sur le plateau
+	protected Map<Case, Case> coupsUrgents; // coup à jouer le plus vite possible (protection de coupes)
+	protected List<Case> coupsImportants; // coups à jouer de préférence avant l'adversaire (coupe de deux groupes)
+	
 
-	public Ordinateur(int id, String nom, Color couleur) {
+	public OrdinateurMeilleurCoupAdjacent(int id, String nom, Color couleur) {
 		super(id, nom, couleur);
-		ordinateur = true;
 		etat = Etat.INFLUENCE;
-		coupsRestants = null;
 	}
 
 	/**
 	 * Initialise les variables de l'ordinateur
 	 */
 	public void initialiser(Partie partie) {
+		super.initialiser(partie);
 		coupsUrgents = new HashMap<>();
 		coupsImportants = new ArrayList<>();
-		coupsRestants = new HashSet<>();
-		coupsRestants.addAll(partie.getPlateau().getCases());
-		System.out.println("restants : " + coupsRestants);
-	}
-
-	/**
-	 * Permet à l'ordinateur de jouer un coup sur le plateau
-	 * 
-	 * @param partie
-	 *            la partie en cours
-	 */
-	public Case jouer(Partie partie) {
-		if (coupsRestants == null)
-			initialiser(partie);
-
-		Case dernierCoup = partie.getDernierCoup();
-		if (dernierCoup != null) {
-			coupsRestants.remove(dernierCoup);
-		}
-
-		Case coup = choisirCoup(partie);
-		super.jouer(partie, coup);
-
-		coupsRestants.remove(coup);
-
-		return coup;
 	}
 
 	/**
@@ -80,6 +56,7 @@ public class Ordinateur extends Joueur {
 	 *            la partie en cours
 	 * @return la case à jouer
 	 */
+	@Override
 	public Case choisirCoup(Partie partie) {
 		/*
 		 * Case dernierCoup = partie.getDernierCoup();
@@ -149,40 +126,20 @@ public class Ordinateur extends Joueur {
 	}
 
 	/**
-	 * Jouer un coup aléatoire sur le plateau
-	 */
-	public Case coupAleatoire(Partie partie) {
-		Case coup = null;
-
-		for (Case c : coupsRestants) {
-			return c;
-		}
-
-		Random r = new Random();
-		while (coup == null || coup.getProprietaire() != null) {
-			int x = r.nextInt(partie.getPlateau().getTaille());
-			int y = r.nextInt(partie.getPlateau().getTaille());
-			coup = partie.getPlateau().getCase(x, y);
-		}
-
-		return coup;
-	}
-
-	/**
-	 * Jouer un coup aléatoire sur le plateau mais ne créant pas de coupe
+	 * Jouer le meilleur coup possible localement sur le plateau mais ne créant pas de coupe
 	 * potentielle dans le groupe de l'ordinateurs
 	 */
 	public Case coupAleatoireSansCoupe(Partie partie) {
 		Case coup = null;
-
+		float valeurCoup = 0.0f;
+		
 		for (Case c : coupsRestants) {
 			List<Case> adjacents = partie.getPlateau().getCasesAdjacentes(c, this);
 			if (!adjacents.isEmpty()) {
-				if (c.getValeur() == partie.getPlateau().getMax())
-					return c;
-				else if (coup == null || c.getValeur() > coup.getValeur()) {
+				float val = AnalyseUtils.poidsEmplacement(partie.getPlateau(), c);
+				if (val > valeurCoup)
+					valeurCoup = val;
 					coup = c;
-				}
 			}
 		}
 

@@ -1,6 +1,8 @@
 package jeu.modele.analyse;
 
-import jeu.Config;
+import java.util.List;
+import java.util.Set;
+
 import jeu.modele.Case;
 import jeu.modele.Plateau;
 
@@ -26,8 +28,9 @@ public class AnalyseUtils {
 	}
 
 	/**
-	 * Calcule le poids d'un emplacement sur le plateau O(1) : car 9 cases évaluées
-	 * au maximum
+	 * Calcule le poids d'un emplacement sur le plateau à un certain tour de la partie
+	 * O(1) : car 9 cases évaluées au maximum
+	 * 
 	 * 
 	 * @param p le plateau de la partie en cours
 	 * @param c la case dont on souhaite connaître le poids
@@ -42,7 +45,9 @@ public class AnalyseUtils {
 		float poids = 0.0f;
 		for (int y = debY; y <= finY; y++) {
 			for (int x = debX; x <= finX; x++) {
-				poids += p.getCase(x, y).getValeur();
+				Case adj = p.getCase(x, y);
+				if (adj.getProprietaire() == null)
+					poids += adj.getValeur();
 			}
 		}
 		return poids;
@@ -115,4 +120,20 @@ public class AnalyseUtils {
 		return poidsQuarts;
 	}
 
+	/**
+	 * Vérifie si un coup est joué en diagonale
+	 */
+	public static boolean coupEnDiagonale(Case coup1, Case coup2) {
+		int deltaX = Math.abs(coup1.getX() - coup2.getX());
+		int deltaY = Math.abs(coup1.getY() - coup2.getY());
+		
+		return deltaX + deltaY == 2;
+	}
+	
+	/**
+	 * 
+	 */
+	public static List<Case> listerCoupsForme(Plateau p, Set<Case> coupsRestants, Case coup1, Case coup2) {
+		return null;
+	}
 }

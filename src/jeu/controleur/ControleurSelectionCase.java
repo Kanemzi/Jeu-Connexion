@@ -10,9 +10,9 @@ import javax.swing.JOptionPane;
 import jeu.Config;
 import jeu.modele.Case;
 import jeu.modele.Joueur;
-import jeu.modele.Ordinateur;
 import jeu.modele.Partie;
 import jeu.modele.analyse.AnalyseUtils;
+import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent;
 import jeu.vue.BoutonCase;
 import jeu.vue.VueJeu;
 
