@@ -66,6 +66,41 @@ public class JeuConnexion extends JFrame {
 		return partie;
 	}
 	
+
+	public Partie chargerOrdiHumain(String nomJoueur, String nomOrdinateur, String nomPartie,	boolean ordinateurCommence) {
+		if (vue != null) remove(vue);
+
+		partie = new Partie(nomPartie, nomJoueur, nomOrdinateur, true, ordinateurCommence ? 1 : 0);
+		//partie = new Partie("res/plateaux/Joueur 1-Joueur 2-1573566204059.cnx", nomJoueur1, nomJoueur2);
+		vue = new VueJeu(partie);
+		
+		menu.enregistrerControleurs(partie);
+		
+		add(vue);
+		pack();
+		
+		return partie;
+	}
+	
+	public Partie chargerDeuxHumains(String nomJoueur1, String nomJoueur2, String nomPartie) {
+		if (vue != null) remove(vue);
+
+		partie = new Partie(nomPartie, nomJoueur1, nomJoueur2, false, 1);
+		//partie = new Partie("res/plateaux/Joueur 1-Joueur 2-1573566204059.cnx", nomJoueur1, nomJoueur2);
+		vue = new VueJeu(partie);
+		
+		float[][] poids = AnalyseUtils.calculerPoidsPlateau(partie.getPlateau()).poids;
+		for (int x = 0; x < poids[0].length; x++) {
+			System.out.println(Arrays.toString(poids[x]));
+		}
+		
+		menu.enregistrerControleurs(partie);
+		
+		add(vue);
+		pack();
+		
+		return partie;
+	}
 	public VueJeu getVue() {
 		return vue;
 	}
@@ -73,4 +108,7 @@ public class JeuConnexion extends JFrame {
 	public static void main(String[] args) {
 		new JeuConnexion();
 	}
+
+
+
 }

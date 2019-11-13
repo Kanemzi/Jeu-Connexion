@@ -7,9 +7,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import jeu.JeuConnexion;
+import jeu.controleur.ControleurChargerPartie;
 import jeu.controleur.ControleurColorerCase;
 import jeu.controleur.ControleurExisteCheminCases;
 import jeu.controleur.ControleurNouvellePartie;
+import jeu.controleur.ControleurRelierComposantes;
 import jeu.controleur.ControleurSauvegarderPartie;
 import jeu.modele.Partie;
 
@@ -19,11 +21,12 @@ public class VueMenuActions extends JMenuBar {
 	private JMenuItem optionNouvellePartieJoueur;
 	private JMenuItem optionNouvellePartieOrdinateur;
 	private JMenuItem optionSauvegarderPartie;
+	private JMenuItem optionChargerPartie;
 	
 	private JMenu menuActions;
 	private JMenuItem optionColorerCase;
 	private JMenuItem optionExisteCheminCases;
-	private JMenuItem optionRelierComposante;
+	private JMenuItem optionRelierComposantes;
 		
 	public VueMenuActions(JeuConnexion jeu) {
 		optionNouvellePartieJoueur = new JMenuItem("Joueur contre joueur");
@@ -33,6 +36,7 @@ public class VueMenuActions extends JMenuBar {
 		optionNouvellePartieOrdinateur.setMnemonic(KeyEvent.VK_O);
 		
 		optionSauvegarderPartie = new JMenuItem("Sauvegarder la partie");
+		optionChargerPartie = new JMenuItem("Charger une partie");
 		
 		menuPartie = new JMenu("Partie");
 		menuPartie.setMnemonic(KeyEvent.VK_P);
@@ -40,22 +44,24 @@ public class VueMenuActions extends JMenuBar {
 		menuPartie.add(optionNouvellePartieJoueur);
 		menuPartie.add(optionNouvellePartieOrdinateur);
 		menuPartie.add(optionSauvegarderPartie);
+		menuPartie.add(optionChargerPartie);
 		optionSauvegarderPartie.setEnabled(false);
 		
 		optionColorerCase = new JMenuItem("ColorerCase");
 		optionExisteCheminCases = new JMenuItem("ExisteCheminCases");
-		optionRelierComposante = new JMenuItem("RelierComposante");
+		optionRelierComposantes = new JMenuItem("RelierComposante");
 		menuActions = new JMenu("Actions");
 		
 		menuActions.add(optionColorerCase);
 		menuActions.add(optionExisteCheminCases);
-		menuActions.add(optionRelierComposante);
+		menuActions.add(optionRelierComposantes);
 		
 		add(menuPartie);
 		add(menuActions);
 
 		optionNouvellePartieJoueur.addActionListener(new ControleurNouvellePartie(jeu, false));
 		optionNouvellePartieOrdinateur.addActionListener(new ControleurNouvellePartie(jeu, true));
+		optionChargerPartie.addActionListener(new ControleurChargerPartie(jeu, false));
 	}
 	
 	public void enregistrerControleurs(Partie partie) {
@@ -64,5 +70,7 @@ public class VueMenuActions extends JMenuBar {
 		optionColorerCase.addActionListener(new ControleurColorerCase(partie));
 		optionSauvegarderPartie.addActionListener(new ControleurSauvegarderPartie(partie));
 		optionExisteCheminCases.addActionListener(new ControleurExisteCheminCases(partie));
+		optionRelierComposantes.addActionListener(new ControleurRelierComposantes(partie));
+		
 	}
 }
