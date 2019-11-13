@@ -27,7 +27,7 @@ public class ControleurNouvellePartie implements ActionListener {
 		
 		if (ordinateur) {
 			Partie p = jeu.JouerOrdiHumain(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax(), parametres.isOrdinateurCommence());
-			if (parametres.isOrdinateurCommence()) {
+			if (p.getJoueurTour().isOrdinateur()) {
 				p.jouerTour(null, jeu.getVue());
 			}
 		} else 
