@@ -12,30 +12,20 @@ import jeu.modele.Partie;
 import jeu.modele.analyse.AnalyseUtils;
 
 /**
- * Niveau 1
- * Ordinateur un peu plus avancé, ne joue que des coups adjacents à son groupe principal.
- * Le coup choisi est celui apportant le plus de points localement (somme des valeurs des cases à une distance de 1)
+ * Niveau 2
+ * Ordinateur choisissant toujours la case apportant le plus de points localement.
+ * A la différence de l'ordinateur de niveau 1, celui-ci peut s'étendre en diagonale afin de chercher plus rapidement
+ * les foyers de points importants.
+ * Cet ordinateur sait se protéger des coupes de son adversaire sur ses coups en diagonale
  * 
- * Lorsqu'aucun coup adjacent n'est possible, un coup aléatoire est joué
+ * Lorsqu'aucun coup adjacent ou en diagonale n'est possible, un coup aléatoire est joué
  */
-public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
-
-	enum Etat {
-		INFLUENCE, // L'ordinateur cherche à se développer au maximum sur le plateau et à réduire
-					// l'adversaire
-		REMPLISSAGE // L'ordinateur cherche à rejoindre les groupes de cases les plus "lourds" tout
-					// en réduisant l'intérieur du territoire adversaire si cela vaut plus de points
-	}
-
-	protected Etat etat;
-
-	// memoire de l'IA
-	protected List<Case> coupsImportants; // coups à jouer de préférence avant l'adversaire (coupe de deux groupes)
+public class OrdinateurExtensionRapide extends OrdinateurMeilleurCoupAdjacent {
 	
-
-	public OrdinateurMeilleurCoupAdjacent(int id, String nom, Color couleur) {
+	protected Map<Case, Case> coupsUrgents; // réactions immédiates à des coups de l'adersaire (menace de coupe par exemple)
+	
+	public OrdinateurExtensionRapide(int id, String nom, Color couleur) {
 		super(id, nom, couleur);
-		etat = Etat.INFLUENCE;
 	}
 
 	/**
@@ -43,7 +33,7 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 	 */
 	public void initialiser(Partie partie) {
 		super.initialiser(partie);
-		coupsImportants = new ArrayList<>();
+		coupsUrgents = new HashMap<>();
 	}
 
 	/**

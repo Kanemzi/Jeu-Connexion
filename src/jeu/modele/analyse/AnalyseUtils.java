@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import jeu.modele.Case;
+import jeu.modele.Joueur;
 import jeu.modele.Plateau;
 
 public class AnalyseUtils {
@@ -12,8 +13,10 @@ public class AnalyseUtils {
 	 * Retourne la hauteur d'un coup sur le plateau (le coup au centre étant le coup
 	 * le plus haut et les coups sur les bords ayant une hauteur de 0)
 	 * 
-	 * @param p le plateau de la partie en cours
-	 * @param c la case dont il faut récupérer la hauteur
+	 * @param p
+	 *            le plateau de la partie en cours
+	 * @param c
+	 *            la case dont il faut récupérer la hauteur
 	 * @return la hauteur de la case c
 	 */
 	public static int hauteurCase(Plateau p, Case c) {
@@ -28,12 +31,14 @@ public class AnalyseUtils {
 	}
 
 	/**
-	 * Calcule le poids d'un emplacement sur le plateau à un certain tour de la partie
-	 * O(1) : car 9 cases évaluées au maximum
+	 * Calcule le poids d'un emplacement sur le plateau à un certain tour de la
+	 * partie O(1) : car 9 cases évaluées au maximum
 	 * 
 	 * 
-	 * @param p le plateau de la partie en cours
-	 * @param c la case dont on souhaite connaître le poids
+	 * @param p
+	 *            le plateau de la partie en cours
+	 * @param c
+	 *            la case dont on souhaite connaître le poids
 	 * @return le poids de l'emplacement à la case c
 	 */
 	public static float poidsEmplacement(Plateau p, Case c) {
@@ -80,7 +85,10 @@ public class AnalyseUtils {
 
 	/**
 	 * Calcule le poids d'une zone sur le plateau
-	 * @param coefBordures le coeficient d'importance des cases en bordure de plateau (considérées comme normalement difficilement accessibles)
+	 * 
+	 * @param coefBordures
+	 *            le coeficient d'importance des cases en bordure de plateau
+	 *            (considérées comme normalement difficilement accessibles)
 	 */
 	public static float calculerPoidsZone(Plateau p, int x0, int y0, int x1, int y1, float coefBordures) {
 		float poids = 0;
@@ -88,7 +96,8 @@ public class AnalyseUtils {
 			for (int y = y0; y <= y1; y++) {
 				Case c = p.getCase(x, y);
 				float valeur = (float) c.getValeur();
-				if (hauteurCase(p, c) == 0) valeur *= coefBordures;
+				if (hauteurCase(p, c) == 0)
+					valeur *= coefBordures;
 				poids += valeur;
 			}
 		}
@@ -96,8 +105,9 @@ public class AnalyseUtils {
 	}
 
 	/**
-	 * Calcule le poids des quarts du plateau 
-	 * O(n) : avec n le nombre de cases sur le plateau
+	 * Calcule le poids des quarts du plateau O(n) : avec n le nombre de cases sur
+	 * le plateau
+	 * 
 	 * @param p
 	 * @return
 	 */
@@ -106,17 +116,16 @@ public class AnalyseUtils {
 		int parite = 1 - taille % 2;
 		int centre = taille / 2 - parite;
 		float[] poidsQuarts = new float[4];
-		
+
 		System.out.println("taille: " + taille);
 		System.out.println("centre: " + centre);
 		System.out.println("parite: " + parite);
-		
-		
+
 		poidsQuarts[0] = calculerPoidsZone(p, 0, 0, centre, centre, coefBordures);
-		poidsQuarts[1] = calculerPoidsZone(p, centre + parite, 0, taille - 1, centre, coefBordures);	
-		poidsQuarts[2] = calculerPoidsZone(p, 0, centre + parite, centre, taille - 1, coefBordures);	
-		poidsQuarts[3] = calculerPoidsZone(p, centre + parite, centre + parite, taille - 1, taille - 1, coefBordures);	
-		
+		poidsQuarts[1] = calculerPoidsZone(p, centre + parite, 0, taille - 1, centre, coefBordures);
+		poidsQuarts[2] = calculerPoidsZone(p, 0, centre + parite, centre, taille - 1, coefBordures);
+		poidsQuarts[3] = calculerPoidsZone(p, centre + parite, centre + parite, taille - 1, taille - 1, coefBordures);
+
 		return poidsQuarts;
 	}
 
@@ -126,10 +135,29 @@ public class AnalyseUtils {
 	public static boolean coupEnDiagonale(Case coup1, Case coup2) {
 		int deltaX = Math.abs(coup1.getX() - coup2.getX());
 		int deltaY = Math.abs(coup1.getY() - coup2.getY());
-		
+
 		return deltaX + deltaY == 2;
 	}
-	
+
+	/**
+	 * Vérifie si deux coup joué sont sur une diagonale vide 
+	 * /!\ retourne true si le coup n'est pas en diagonale car la fonction ne sera appelée que sur des cases adjacentes
+	 * (si true, on peut considérer le coup safe -> exception pour les doubles coupes à effectuer du côté du bot)
+	 * @param coup1 un coup déjà existant posé par un joueur
+	 * @param coup2 le coup que le joueur souhaiter jouer
+	 */
+	public static boolean diagonaleVide(Plateau p, Case coup1, Case coup2) {
+		if (!coupEnDiagonale(coup1, coup2)) return true; // mouvement adjacent sans coupes
+		Joueur joueurCoup = coup1.getProprietaire();
+		int x1 = coup1.getX(), y1 = coup1.getY();
+		int x2 = coup2.getX(), y2 = coup2.getY();
+		
+		Case diag1 = p.getCase(x1, y2);
+		Case diag2 = p.getCase(x2, y1);
+		
+		return false;
+	}
+
 	/**
 	 * 
 	 */

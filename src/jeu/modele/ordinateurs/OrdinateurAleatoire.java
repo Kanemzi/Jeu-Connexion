@@ -1,15 +1,14 @@
 package jeu.modele.ordinateurs;
 
 import java.awt.Color;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 
 import jeu.modele.Case;
-import jeu.modele.Joueur;
 import jeu.modele.Partie;
-import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent.Etat;
 
+/**
+ * Niveau 0
+ * Ordinateur adoptant la stratégie la plus basique possible, consistant à jouer un coup aléatoirement sur le plateau
+ */
 public class OrdinateurAleatoire extends Ordinateur {
 	public OrdinateurAleatoire(int id, String nom, Color couleur) {
 		super(id, nom, couleur);
@@ -18,7 +17,7 @@ public class OrdinateurAleatoire extends Ordinateur {
 	public Case choisirCoup(Partie partie) {
 		return coupAleatoire(partie);
 	}
-	
+
 	/**
 	 * Jouer un coup aléatoire libre sur le plateau
 	 */
@@ -27,7 +26,7 @@ public class OrdinateurAleatoire extends Ordinateur {
 		for (Case c : coupsRestants) {
 			return c;
 		}
-		
+
 		// ne doit en théorie jamais arriver
 		return null;
 	}	
