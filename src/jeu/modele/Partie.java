@@ -19,9 +19,12 @@ public class Partie {
 	private int maxTours;
 	private int decalageTour;
 	
+	private Case dernierCoup;
+	
 	public Partie() {
 		tour = 0;
 		joueurs = new Joueur[2];
+		dernierCoup = null;
 	}
 
 	public Partie(int n, int max, String nom1, String nom2, boolean ordinateur, int decalageTour) {
@@ -58,13 +61,6 @@ public class Partie {
 		tour = plateau.getPlacees();
 		maxTours = plateau.getTaille() * plateau.getTaille();
 	}
-	
-	/**
-	 * Lancer la partie
-	 */
-	public void lancer() {
-		
-	}
 
 	public Plateau getPlateau() {
 		return plateau;
@@ -84,6 +80,10 @@ public class Partie {
 	
 	public int getMaxTour() {
 		return maxTours;
+	}
+	
+	public Case getDernierCoup() {
+		return dernierCoup;
 	}
 	
 	public void addTour() {
@@ -128,10 +128,12 @@ public class Partie {
 		**/
 		// -----------------------------------------
 
+		dernierCoup = caseCliquee;
+		
 		vue.getOverlay()
 				.setCasesSurbrillances(getPlateau().AfficherComposante(caseCliquee.getX(), caseCliquee.getY()));
 
-		vue.getOverlay().setDernierCoup(caseCliquee);
+		vue.getOverlay().setDernierCoup(dernierCoup);
 
 		int[] points = compterPoints();
 		vue.getInformations().mettreAJourScores(points);

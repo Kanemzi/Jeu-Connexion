@@ -1,12 +1,12 @@
 package jeu.modele.analyse;
 
 public class PoidsPlateau {
-	public int poids[][];
-	public int poidsMax;
+	public float poids[][];
+	public float poidsMax;
 	public int xmax, ymax;
 	
 	public PoidsPlateau(int taille) {
-		poids = new int[taille][taille];
+		poids = new float[taille][taille];
 		poidsMax = -1;
 	}
 }
