@@ -36,7 +36,7 @@ public class Partie {
 	
 	public Partie(int n, int max, String nom1, String nom2, boolean ordinateur) {
 		this();
-		joueurs[0] = new Ordinateur(0, nom1, Color.red);
+		joueurs[0] = new Joueur(0, nom1, Color.red);
 		if (ordinateur) {
 			joueurs[1] = new Ordinateur(1, nom2, Color.blue);
 		} else {

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import jeu.modele.analyse.AnalyseUtils;
+import jeu.modele.analyse.PoidsPlateau;
+
 public class Ordinateur extends Joueur {
 
 	// memoire de l'IA
@@ -34,11 +37,12 @@ public class Ordinateur extends Joueur {
 	 * @return la case à jouer
 	 */
 	public Case choisirCoup(Partie partie) {
+		if (partie.getTour() <= 1) {
+			System.out.println("premier coup");
+			return choisirPremierCoup(partie.getPlateau());
+		}
+		
 		return coupAleatoire(partie);
-		// if (partie.getTour() <= 1) {
-		// return choisirPremierCoup(partie.getPlateau());
-		// }
-		// return null;
 	}
 
 	/**
@@ -49,8 +53,10 @@ public class Ordinateur extends Joueur {
 	 * @return le premier coup à jouer
 	 */
 	public Case choisirPremierCoup(Plateau plateau) {
-		return null;
+		PoidsPlateau pp = AnalyseUtils.calculerPoidsPlateau(plateau);
+		return plateau.getCase(pp.xmax, pp.ymax);
 	}
+
 
 	public Case coupAleatoire(Partie partie) {
 		Case coup = null;
