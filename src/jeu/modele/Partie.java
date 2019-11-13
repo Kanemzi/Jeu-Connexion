@@ -11,6 +11,7 @@ import jeu.Config;
 import jeu.modele.analyse.AnalyseUtils;
 import jeu.modele.ordinateurs.Ordinateur;
 import jeu.modele.ordinateurs.OrdinateurAleatoire;
+import jeu.modele.ordinateurs.OrdinateurExpansionRapide;
 import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent;
 import jeu.vue.VueJeu;
 
@@ -44,9 +45,9 @@ public class Partie {
 	
 	public Partie(int n, int max, String nom1, String nom2, boolean ordinateur) {
 		this();
-		joueurs[0] = new OrdinateurAleatoire(0, nom1, Color.red);
+		joueurs[0] = new Joueur(0, nom1, Color.red);
 		if (ordinateur) {
-			joueurs[1] = new OrdinateurMeilleurCoupAdjacent(1, nom2, Color.blue);
+			joueurs[1] = new OrdinateurExpansionRapide(1, nom2, Color.blue);
 		} else {
 			joueurs[1] = new Joueur(1, nom2, Color.blue);					
 		}

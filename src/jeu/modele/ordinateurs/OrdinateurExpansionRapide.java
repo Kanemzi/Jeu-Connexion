@@ -20,11 +20,11 @@ import jeu.modele.analyse.AnalyseUtils;
  * 
  * Lorsqu'aucun coup adjacent ou en diagonale n'est possible, un coup aléatoire est joué
  */
-public class OrdinateurExtensionRapide extends OrdinateurMeilleurCoupAdjacent {
+public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 	
 	protected Map<Case, Case> coupsUrgents; // réactions immédiates à des coups de l'adersaire (menace de coupe par exemple)
 	
-	public OrdinateurExtensionRapide(int id, String nom, Color couleur) {
+	public OrdinateurExpansionRapide(int id, String nom, Color couleur) {
 		super(id, nom, couleur);
 	}
 
