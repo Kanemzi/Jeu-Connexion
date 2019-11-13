@@ -11,7 +11,7 @@ import jeu.modele.analyse.PoidsPlateau;
 public class Ordinateur extends Joueur {
 
 	// memoire de l'IA
-	private Map<Case, Case> coupUrgents; // coup à jouer le plus vite possible (protection de coupes)
+	private Map<Case, Case> coupsUrgents; // coup à jouer le plus vite possible (protection de coupes)
 	private List<Case> coupsImportants; // coups à jouer de préférence avant l'adversaire (coupe de deux groupes)
 
 	public Ordinateur(int id, String nom, Color couleur) {
@@ -37,6 +37,15 @@ public class Ordinateur extends Joueur {
 	 * @return la case à jouer
 	 */
 	public Case choisirCoup(Partie partie) {
+		Case dernierCoup = partie.getDernierCoup();
+		if (dernierCoup != null) { // obligatoirement un coup de l'adversaire
+			if (coupsUrgents.containsKey(dernierCoup)) { // réponse urgente à jouer
+				Case reponse = coupsUrgents.remove(dernierCoup);
+				coupsUrgents.remove(reponse);
+				return reponse;
+			}
+		}
+		
 		if (partie.getTour() <= 1) {
 			System.out.println("premier coup");
 			return choisirPremierCoup(partie.getPlateau());
@@ -58,6 +67,10 @@ public class Ordinateur extends Joueur {
 	}
 
 
+	
+	/**
+	 * Jouer un coup aléatoire sur le plateau
+	 */
 	public Case coupAleatoire(Partie partie) {
 		Case coup = null;
 
