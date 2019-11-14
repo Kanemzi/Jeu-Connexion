@@ -106,7 +106,39 @@ public class JeuConnexion extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		new JeuConnexion();
+		if (Config.TEST) {
+			float parties = 1;
+			float rouge = 0;
+			float bleu = 0;
+			float egalite = 0;
+			
+			Partie p = new Partie(Config.TAILLE_GRILLE, Config.MAX_VALEUR, "Rouge", "Bleu", true, Config.BLEU_COMMENCE ? 1 : 0);
+			p.jouerTour(null, new VueJeu(p));
+			
+			while (parties <= Config.TAILLE_ECHANTILLON) {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (p.terminee()) {
+					parties++;
+					int[] points = p.compterPoints();
+					if (points[0] > points[1])
+						rouge++;
+					else if (points[1] > points[0])
+						bleu++;
+					else egalite++;
+					
+					System.out.println("_________________\npartie " + (parties-1) + "\nrouge: " + rouge/(parties-1) + "\nbleu: " + bleu/(parties-1) + "\negalite: " + egalite/(parties-1));
+					
+					p = new Partie(Config.TAILLE_GRILLE, Config.MAX_VALEUR, "Rouge", "Bleu", true, Config.BLEU_COMMENCE ? 1 : 0);
+					p.jouerTour(null, new VueJeu(p));
+				}
+			}
+				
+		} else 
+			new JeuConnexion();
 	}
 
 

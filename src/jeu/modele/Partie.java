@@ -1,6 +1,7 @@
 package jeu.modele;
 
 import java.awt.Color;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,9 +46,29 @@ public class Partie {
 	
 	public Partie(int n, int max, String nom1, String nom2, boolean ordinateur) {
 		this();
-		joueurs[0] = new OrdinateurMeilleurCoupAdjacent(0, nom1, Color.red);
+		
+		if (!Config.TEST) joueurs[0] = new Joueur(0, nom1, Color.red);
+		else {
+			try {
+				joueurs[0] = (Joueur) Config.ORDI_ROUGE.getDeclaredConstructor(int.class, String.class, Color.class)
+								.newInstance(0, nom1, Color.red);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		if (ordinateur) {
-			joueurs[1] = new OrdinateurExpansionRapide(1, nom2, Color.blue);
+			if (!Config.TEST) joueurs[1] = new OrdinateurExpansionRapide(1, nom2, Color.blue);
+			else {
+				try {
+					joueurs[1] = (Joueur) Config.ORDI_BLEU.getDeclaredConstructor(int.class, String.class, Color.class)
+									.newInstance(1, nom2, Color.blue);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					e.printStackTrace();
+				}
+			}
 		} else {
 			joueurs[1] = new Joueur(1, nom2, Color.blue);					
 		}
@@ -159,13 +180,13 @@ public class Partie {
 				vue.getInformations().mettreAJourVainqueur(getJoueurs()[0]);
 				vue.getInformations().mettreAJourVainqueur(getJoueurs()[1]);
 
-				JOptionPane.showMessageDialog(null, "Partie terminée à égalité ! \n\n" + affichageScores,
+				if (!Config.TEST) JOptionPane.showMessageDialog(null, "Partie terminée à égalité ! \n\n" + affichageScores,
 						"Partie terminée", JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				Joueur gagnant = getJoueurs()[idgagnant];
 				vue.getInformations().mettreAJourVainqueur(gagnant);
 
-				JOptionPane.showMessageDialog(null, gagnant.getNom() + " gagne la partie ! \n\n" + affichageScores,
+				if (!Config.TEST) JOptionPane.showMessageDialog(null, gagnant.getNom() + " gagne la partie ! \n\n" + affichageScores,
 						"Partie terminée", JOptionPane.INFORMATION_MESSAGE);
 			}
 
