@@ -28,7 +28,7 @@ public class OrdinateurLimitationEnfermement extends OrdinateurExpansionRapide {
 	public Case meilleurCoupSansCoupe(Partie partie) {
 		Case coup = null, liaison = null;
 		float valeurCoup = 0.0f;
-		System.out.println("_________________________________");
+
 		for (Case c : coupsRestants) {
 			float val = AnalyseUtils.poidsEmplacement(partie.getPlateau(), c);
 			

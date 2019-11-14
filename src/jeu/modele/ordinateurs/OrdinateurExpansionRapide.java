@@ -46,6 +46,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 	public Case jouer(Partie partie) {
 		Case coup = super.jouer(partie);
 		supprimerCoupesComblees(coup); // on supprime les coupes comblées par le dernier coup joué par l'ordinateur
+		System.out.println(getNom() + " urgents : " + coupsUrgents);
 		return coup;
 	}
 
@@ -68,23 +69,20 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 			return choisirPremierCoup(partie);
 		}
 
-		Case coup;
+		Case coup = null;
 
 		switch (etat) {
 		case EXPANSION:
 			coup = meilleurCoupSansCoupe(partie);
-			if (coup != null)
-				return coup;
-			etat = Etat.AGRESSIF;
+			if (coup == null)
+				etat = Etat.AGRESSIF;
+			break;
 		case AGRESSIF:
 			coup = meilleurCoupValeurContact(partie);
 			// if (partie.getPlateau().getCasesAdjacentes(coup, adversaire).isEmpty())
 			// etat = Etat.EXPANSION;
-			return coup;
-
 		}
-
-		return null;
+		return coup;
 	}
 
 	/**
@@ -92,12 +90,38 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 	 * de coupe directe potentielle dans le groupe de l'ordinateur
 	 */
 	public Case meilleurCoupSansCoupe(Partie partie) {
-		Case coup = null, liaison = null;
-		float valeurCoup = 0.0f;
+		Case coup = null;
+		Case liaison = null;
+		float valeurMax = 0.0f;
+		
+		for (Case c : groupePrincipal) {
+			List<Case> adjacentesVides = partie.getPlateau().getCasesAutour(c, null);
+			for (Case vide : adjacentesVides) {
+				float valeur = AnalyseUtils.poidsEmplacement(partie.getPlateau(), vide);
+				if (valeur <= valeurMax) continue;
+				
+				boolean sansCoupe = AnalyseUtils.coupLiable(partie.getPlateau(), c, vide);
+				if (sansCoupe && verificationDoubleCoupe(partie.getPlateau(), vide, c)) {
+					valeurMax = valeur;
+					coup = vide;
 
+					if (AnalyseUtils.coupEnDiagonaleVide(partie.getPlateau(), c, vide)) {
+						liaison = c;
+					} else { // le coup le plus rentable jusque la n'est pas une diagonale
+						liaison = null;
+					}
+				}
+			}
+		}
+
+		/*if (coup != null)
+			return coupGroupe(coup);*/
+
+		// return null;
+/*
 		for (Case c : coupsRestants) {
 			float val = AnalyseUtils.poidsEmplacement(partie.getPlateau(), c);
-			if (val <= valeurCoup)
+			if (val <= valeurMax)
 				continue;
 			// le coup est le plus rentable trouvé jusque là
 			List<Case> autour = partie.getPlateau().getCasesAutour(c, this);
@@ -106,7 +130,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 				if (sansCoupe && verificationDoubleCoupe(partie.getPlateau(), c, a)) { // si le coup peut se lier à un
 																						// coup déjà joué sans coupe
 																						// possible
-					valeurCoup = val;
+					valeurMax = val;
 					coup = c;
 					if (AnalyseUtils.coupEnDiagonaleStricte(partie.getPlateau(), a, c)) {
 						liaison = a;
@@ -116,7 +140,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 					break;
 				}
 			}
-		}
+		}*/
 
 		if (coup != null) {
 			// ajout des coups urgents en cas de coupe
@@ -144,6 +168,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 	}
 
 	protected boolean verificationDoubleCoupe(Plateau p, Case coup1, Case coup2) {
+		if (!AnalyseUtils.coupEnDiagonale(coup1, coup2)) return true;
 		int x1 = coup1.getX(), y1 = coup1.getY();
 		int x2 = coup2.getX(), y2 = coup2.getY();
 

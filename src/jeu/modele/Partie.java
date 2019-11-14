@@ -61,7 +61,7 @@ public class Partie {
 		}
 		
 		if (ordinateur) {
-			if (!Config.TEST) joueurs[1] = new OrdinateurMeilleurCoupAdjacent(1, nom2, Color.blue);
+			if (!Config.TEST) joueurs[1] = new OrdinateurExpansionRapide(1, nom2, Color.blue);
 			else {
 				try {
 					joueurs[1] = (Joueur) Config.ORDI_BLEU.getDeclaredConstructor(int.class, String.class, Color.class)

@@ -24,12 +24,11 @@ import jeu.modele.analyse.AnalyseUtils;
 public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 
 	protected enum Etat {
-		EXPANSION,
-		AGRESSIF
+		EXPANSION, AGRESSIF
 	}
-	
+
 	protected Etat etat;
-	
+
 	protected Set<Case> groupePrincipal; // l'ensemble des cases liées directement ou indirectement au groupe principal
 											// construit
 
@@ -61,20 +60,21 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 		if (partie.getTour() <= 1) {
 			return choisirPremierCoup(partie);
 		}
-		
+
 		Case coup;
-		
-		switch(etat) {
+
+		switch (etat) {
 		case EXPANSION:
 			coup = meilleurCoupAdjacent(partie);
-			if (coup != null) return coup;
+			if (coup != null)
+				return coup;
 			etat = Etat.AGRESSIF;
 		case AGRESSIF:
 			coup = meilleurCoupValeurContact(partie);
 			return coup;
-			
+
 		}
-		
+
 		return null;
 	}
 
@@ -92,7 +92,7 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 		if (parite == 1) { // tenter de prendre le centre
 			Case c = partie.getPlateau().getCase(centrePlateau, centrePlateau);
 			if (c.getProprietaire() == null)
-				return c;
+				return coupGroupe(c);
 		}
 
 		float coef = (partie.getPlateau().getTaille() <= Config.LIMITE_PETIT) ? Config.COEF_BORDURES_PETIT
@@ -109,9 +109,9 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 				idsecond = i;
 			}
 		}
-		
-		System.out.println("ids : " + idmeilleur + " " + idsecond);
 
+		System.out.println(idmeilleur + " " + idsecond);
+		
 		int xmeilleur = idmeilleur % 2;
 		int ymeilleur = idmeilleur / 2;
 
@@ -119,8 +119,6 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 		if (meilleurCoup.getProprietaire() == null)
 			return coupGroupe(meilleurCoup);
 
-		
-		System.out.println("SECOND");
 		int xsecond = idsecond % 2;
 		int ysecond = idsecond / 2;
 
@@ -128,7 +126,6 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 		if (secondCoup.getProprietaire() == null)
 			return coupGroupe(secondCoup);
 
-		System.out.println("OOF");
 		// sécurité même si impossible théoriquement
 		return coupGroupe(meilleurCoupAdjacent(partie));
 	}
@@ -139,15 +136,15 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 	 */
 	public Case meilleurCoupAdjacent(Partie partie) {
 		Case coup = null;
-		float valeurCoup = 0.0f;
+		float valeurMax = 0.0f;
 
-		for (Case c : coupsRestants) {
-			List<Case> adjacents = partie.getPlateau().getCasesAdjacentes(c, this);
-			if (!adjacents.isEmpty()) {
-				float val = AnalyseUtils.poidsEmplacement(partie.getPlateau(), c);
-				if (val > valeurCoup) {
-					valeurCoup = val;
-					coup = c;
+		for (Case c : groupePrincipal) {
+			List<Case> adjacentesVides = partie.getPlateau().getCasesAdjacentes(c);
+			for (Case vide : adjacentesVides) {
+				float valeur = AnalyseUtils.poidsEmplacement(partie.getPlateau(), vide);
+				if (valeur > valeurMax) {
+					valeurMax = valeur;
+					coup = vide;
 				}
 			}
 		}
@@ -195,7 +192,6 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 
 			List<Case> adjacents = partie.getPlateau().getCasesAdjacentes(c, adversaire); // cases adversaires
 																							// adjacentes
-
 			if (!adjacents.isEmpty()) {
 				valeur += partie.getPlateau().getMax(); // on attribue une plus grande valeur à une case adjacente
 
@@ -212,13 +208,13 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 
 		return coup;
 	}
-	
+
 	/**
 	 * Ajoute un coup au groupe principal
 	 */
 	protected Case coupGroupe(Case c) {
 		groupePrincipal.add(c);
-		System.out.println(groupePrincipal);
+		// System.out.println(groupePrincipal);
 		return c;
 	}
 }
