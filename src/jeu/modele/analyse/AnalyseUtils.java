@@ -138,16 +138,12 @@ public class AnalyseUtils {
 
 		return deltaX + deltaY == 2;
 	}
-
+	
 	/**
-	 * Vérifie si deux coup joué sont sur une diagonale vide 
-	 * /!\ retourne true si le coup n'est pas en diagonale car la fonction ne sera appelée que sur des cases adjacentes
-	 * (si true, on peut considérer le coup safe -> exception pour les doubles coupes à effectuer du côté du bot)
-	 * @param coup1 un coup déjà existant posé par un joueur
-	 * @param coup2 le coup que le joueur souhaiter jouer
+	 * Vérifie si un coup est joué en diagonale sans autre case adjacente
 	 */
-	public static boolean diagonaleVide(Plateau p, Case coup1, Case coup2) {
-		if (!coupEnDiagonale(coup1, coup2)) return true; // mouvement adjacent sans coupes
+	public static boolean coupEnDiagonaleStricte(Plateau p, Case coup1, Case coup2) {
+		if (!coupEnDiagonale(coup1, coup2)) return false; // mouvement adjacent sans coupes
 		Joueur joueurCoup = coup1.getProprietaire();
 		int x1 = coup1.getX(), y1 = coup1.getY();
 		int x2 = coup2.getX(), y2 = coup2.getY();
@@ -155,7 +151,27 @@ public class AnalyseUtils {
 		Case diag1 = p.getCase(x1, y2);
 		Case diag2 = p.getCase(x2, y1);
 		
-		return false;
+		return diag1.getProprietaire() == null && diag2.getProprietaire() == null;
+	}
+
+	/**
+	 * Vérifie si deux coup joués sont sur une diagonale vide ou adjacens
+	 * /!\ retourne true si le coup n'est pas en diagonale car la fonction ne sera appelée que sur des cases adjacentes
+	 * (si true, on peut considérer le coup safe -> exception pour les doubles coupes à effectuer du côté du bot)
+	 * @param coup1 un coup déjà existant posé par un joueur
+	 * @param coup2 le coup que le joueur souhaiter jouer
+	 */
+	public static boolean coupLiable(Plateau p, Case coup1, Case coup2) {
+		if (coup1.getProprietaire() == coup2.getProprietaire()) return false;
+		if (!coupEnDiagonale(coup1, coup2)) return true; // mouvement adjacent sans coupes
+		Joueur joueurCoup = coup1.getProprietaire();
+		int x1 = coup1.getX(), y1 = coup1.getY();
+		int x2 = coup2.getX(), y2 = coup2.getY();
+	
+		Case diag1 = p.getCase(x1, y2);
+		Case diag2 = p.getCase(x2, y1);
+		
+		return coupEnDiagonaleStricte(p, coup1, coup2) || diag1.getProprietaire() == joueurCoup || diag2.getProprietaire() == joueurCoup;
 	}
 
 	/**

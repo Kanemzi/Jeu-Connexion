@@ -210,6 +210,34 @@ public class Plateau {
 		return cases;
 	}
 	
+	/**
+	 * Permet de récupérer les cases autour d'une autre case du plateau (diagonales inclues)
+	 * @param c la case à tester
+	 * @param joueur, si précisé, ne retourne que les cases adjacentes appartenant à ce joueur
+	 * @return la liste des cases adjacentes à c
+	 */
+	public List<Case> getCasesAutour(Case c, Joueur joueur) {
+		List<Case> cases = new ArrayList<>(4);
+		int x = c.getX(),
+			y = c.getY();
+		
+		cases.addAll(getCasesAdjacentes(c, joueur));
+		
+		Case gauchehaut = getCase(x - 1, y - 1);
+		if (gauchehaut != null && gauchehaut.getProprietaire() == joueur) cases.add(gauchehaut);
+
+		Case droitehaut = getCase(x + 1, y - 1);
+		if (droitehaut != null && droitehaut.getProprietaire() == joueur) cases.add(droitehaut);
+		
+		Case gauchebas = getCase(x - 1, y + 1);
+		if (gauchebas != null && gauchebas.getProprietaire() == joueur) cases.add(gauchebas);
+		
+		Case droitebas = getCase(x + 1, y + 1);
+		if (droitebas != null && droitebas.getProprietaire() == joueur) cases.add(droitebas);
+			
+		return cases;
+	}
+	
 	public List<Case> getCasesAdjacentes(Case c) {
 		return getCasesAdjacentes(c, null);
 	}

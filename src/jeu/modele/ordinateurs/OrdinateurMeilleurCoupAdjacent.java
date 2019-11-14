@@ -64,11 +64,10 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 		 * return reponse; } }
 		 */
 		if (partie.getTour() <= 1) {
-			System.out.println("premier coup");
 			return choisirPremierCoup(partie);
 		}
 
-		return coupAleatoireSansCoupe(partie);
+		return meilleurCoupAdjacent(partie);
 	}
 
 	/**
@@ -119,14 +118,13 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 			return secondCoup;
 
 		// sécurité même si impossible théoriquement
-		return coupAleatoireSansCoupe(partie);
+		return meilleurCoupAdjacent(partie);
 	}
 
 	/**
-	 * Jouer le meilleur coup possible localement sur le plateau mais ne créant pas de coupe
-	 * potentielle dans le groupe de l'ordinateurs
+	 * Jouer le meilleur coup possible localement sur le plateau et adjacent à un groupe déjà créé (sans coupe indirecte)
 	 */
-	public Case coupAleatoireSansCoupe(Partie partie) {
+	public Case meilleurCoupAdjacent(Partie partie) {
 		Case coup = null;
 		float valeurCoup = 0.0f;
 		
@@ -134,16 +132,16 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 			List<Case> adjacents = partie.getPlateau().getCasesAdjacentes(c, this);
 			if (!adjacents.isEmpty()) {
 				float val = AnalyseUtils.poidsEmplacement(partie.getPlateau(), c);
-				if (val > valeurCoup)
+				if (val > valeurCoup) {
 					valeurCoup = val;
 					coup = c;
+				}
 			}
 		}
 
 		if (coup != null)
 			return coup;
 
-		System.out.println("coup random");
 		// si aucun coup safe possible, jouer un coup aléatoire
 		return coupAleatoire(partie);
 	}
