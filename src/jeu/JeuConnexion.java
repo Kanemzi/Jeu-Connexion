@@ -106,7 +106,7 @@ public class JeuConnexion extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		if (Config.TEST) {
+		if (Config.TEST && !Config.VISIBLE) {
 			float parties = 1;
 			float rouge = 0;
 			float bleu = 0;

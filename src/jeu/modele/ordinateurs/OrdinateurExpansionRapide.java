@@ -134,8 +134,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 			return coup;
 		}
 
-		// si aucun coup safe possible, jouer un coup aléatoire
-		return coupAleatoire(partie);
+		return null;
 	}
 
 	public Case jouerCoupUrgent(Case coup) {
