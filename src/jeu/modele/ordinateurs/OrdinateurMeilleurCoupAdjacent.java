@@ -2,6 +2,7 @@ package jeu.modele.ordinateurs;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,6 +47,7 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 	public void initialiser(Partie partie) {
 		super.initialiser(partie);
 		coupsImportants = new ArrayList<>();
+		groupePrincipal = new HashSet<>();
 	}
 
 	/**
@@ -69,8 +71,6 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 			etat = Etat.AGRESSIF;
 		case AGRESSIF:
 			coup = meilleurCoupValeurContact(partie);
-			//if (partie.getPlateau().getCasesAdjacentes(coup, adversaire).isEmpty())
-			//	etat = Etat.EXPANSION;
 			return coup;
 			
 		}
@@ -100,32 +100,37 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 		float[] poidsQuarts = AnalyseUtils.calculerPoidsQuarts(partie.getPlateau(), coef);
 
 		// besoin de connaître les deux meilleurs coups (si le meilleur est déjà pris)
-		int idmeilleur = 3, idsecond = 3;
+		int idmeilleur = -1, idsecond = -1;
 		for (int i = 0; i < 4; i++) {
-			if (poidsQuarts[i] > poidsQuarts[idmeilleur]) {
+			if (idmeilleur == -1 || poidsQuarts[i] > poidsQuarts[idmeilleur]) {
 				idsecond = idmeilleur;
 				idmeilleur = i;
-			} else if (poidsQuarts[i] > poidsQuarts[idsecond]) {
+			} else if (idsecond == -1 || poidsQuarts[i] > poidsQuarts[idsecond]) {
 				idsecond = i;
 			}
 		}
+		
+		System.out.println("ids : " + idmeilleur + " " + idsecond);
 
 		int xmeilleur = idmeilleur % 2;
 		int ymeilleur = idmeilleur / 2;
 
 		Case meilleurCoup = partie.getPlateau().getCase(centrePlateau + xmeilleur - 1, centrePlateau + ymeilleur - 1);
 		if (meilleurCoup.getProprietaire() == null)
-			return meilleurCoup;
+			return coupGroupe(meilleurCoup);
 
+		
+		System.out.println("SECOND");
 		int xsecond = idsecond % 2;
 		int ysecond = idsecond / 2;
 
-		Case secondCoup = partie.getPlateau().getCase(centrePlateau + xsecond, centrePlateau + ysecond);
+		Case secondCoup = partie.getPlateau().getCase(centrePlateau + xsecond - 1, centrePlateau + ysecond - 1);
 		if (secondCoup.getProprietaire() == null)
-			return secondCoup;
+			return coupGroupe(secondCoup);
 
+		System.out.println("OOF");
 		// sécurité même si impossible théoriquement
-		return meilleurCoupAdjacent(partie);
+		return coupGroupe(meilleurCoupAdjacent(partie));
 	}
 
 	/**
@@ -148,7 +153,7 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 		}
 
 		if (coup != null)
-			return coup;
+			return coupGroupe(coup);
 
 		return null;
 	}
@@ -206,5 +211,14 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 		}
 
 		return coup;
+	}
+	
+	/**
+	 * Ajoute un coup au groupe principal
+	 */
+	protected Case coupGroupe(Case c) {
+		groupePrincipal.add(c);
+		System.out.println(groupePrincipal);
+		return c;
 	}
 }

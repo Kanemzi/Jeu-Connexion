@@ -131,7 +131,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 				coupsUrgents.put(diag1, diag2);
 				coupsUrgents.put(diag2, diag1);
 			}
-			return coup;
+			return coupGroupe(coup);
 		}
 
 		return null;
@@ -140,7 +140,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 	public Case jouerCoupUrgent(Case coup) {
 		Case reponse = supprimerCoupesComblees(coup); // on supprime le coup opposé car celui-ci est à présent rempli
 														// par un joueur
-		return reponse;
+		return coupGroupe(reponse);
 	}
 
 	protected boolean verificationDoubleCoupe(Plateau p, Case coup1, Case coup2) {

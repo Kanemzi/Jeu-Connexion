@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import jeu.Config;
 import jeu.modele.analyse.AnalyseUtils;
 import jeu.modele.ordinateurs.Ordinateur;
-import jeu.modele.ordinateurs.OrdinateurAleatoire;
 import jeu.modele.ordinateurs.OrdinateurExpansionRapide;
 import jeu.modele.ordinateurs.OrdinateurLimitationEnfermement;
 import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent;
@@ -29,6 +28,8 @@ public class Partie {
 	
 	private Case dernierCoup;
 	
+	private boolean exited = false;
+
 	public Partie() {
 		tour = 0;
 		joueurs = new Joueur[2];
@@ -60,7 +61,7 @@ public class Partie {
 		}
 		
 		if (ordinateur) {
-			if (!Config.TEST) joueurs[1] = new OrdinateurLimitationEnfermement(1, nom2, Color.blue);
+			if (!Config.TEST) joueurs[1] = new OrdinateurMeilleurCoupAdjacent(1, nom2, Color.blue);
 			else {
 				try {
 					joueurs[1] = (Joueur) Config.ORDI_BLEU.getDeclaredConstructor(int.class, String.class, Color.class)
@@ -134,6 +135,9 @@ public class Partie {
 	 * @param vue la vue du jeu à mettre à jour
 	 */
 	public void jouerTour(Case caseCliquee, final VueJeu vue) {
+		
+		if (isExited()) return;
+		
 		/**
 		 * Clic sur une case non occupée
 		 */
@@ -238,4 +242,13 @@ public class Partie {
 		
 		return points;
 	}
+	
+	public boolean isExited() {
+		return exited;
+	}
+
+	public void exit() {
+		this.exited = true;
+	}
+
 }

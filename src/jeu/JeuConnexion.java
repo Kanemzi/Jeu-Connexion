@@ -132,6 +132,7 @@ public class JeuConnexion extends JFrame {
 					
 					System.out.println("_________________\npartie " + (parties-1) + "\nrouge: " + rouge/(parties-1) + "\nbleu: " + bleu/(parties-1) + "\negalite: " + egalite/(parties-1));
 					
+					p.exit();
 					p = new Partie(Config.TAILLE_GRILLE, Config.MAX_VALEUR, "Rouge", "Bleu", true, Config.BLEU_COMMENCE ? 1 : 0);
 					p.jouerTour(null, new VueJeu(p));
 				}
@@ -141,6 +142,8 @@ public class JeuConnexion extends JFrame {
 			new JeuConnexion();
 	}
 
-
+	public Partie getPartieActuelle() {
+		return partie;
+	}
 
 }

@@ -28,15 +28,17 @@ public class OrdinateurLimitationEnfermement extends OrdinateurExpansionRapide {
 	public Case meilleurCoupSansCoupe(Partie partie) {
 		Case coup = null, liaison = null;
 		float valeurCoup = 0.0f;
-
+		System.out.println("_________________________________");
 		for (Case c : coupsRestants) {
 			float val = AnalyseUtils.poidsEmplacement(partie.getPlateau(), c);
 			
 			List<Case> adjacents = partie.getPlateau().getCasesAdjacentes(c, adversaire);
-			if (!adjacents.isEmpty()) val *= 4; // grande priorité aux coups de contact en début de partie
-			
+			int mult = partie.getPlateau().getMax();
+			if (!adjacents.isEmpty()) val += 1000 * mult * mult; // grande priorité aux coups de contact en début de partie
+			//System.out.println(c + ": " + val + " -> " + adjacents);
 			if (val <= valeurCoup)
 				continue;
+			//System.out.println("OK");
 			// le coup est le plus rentable trouvé jusque là
 			List<Case> autour = partie.getPlateau().getCasesAutour(c, this);
 			for (Case a : autour) {
@@ -69,32 +71,9 @@ public class OrdinateurLimitationEnfermement extends OrdinateurExpansionRapide {
 				coupsUrgents.put(diag1, diag2);
 				coupsUrgents.put(diag2, diag1);
 			}
-			return coup;
+			return coupGroupe(coup);
 		}
 
 		return null;
-	}
-
-	public Case jouerCoupUrgent(Case coup) {
-		Case reponse = supprimerCoupesComblees(coup); // on supprime le coup opposé car celui-ci est à présent rempli
-														// par un joueur
-		return reponse;
-	}
-
-	protected boolean verificationDoubleCoupe(Plateau p, Case coup1, Case coup2) {
-		int x1 = coup1.getX(), y1 = coup1.getY();
-		int x2 = coup2.getX(), y2 = coup2.getY();
-
-		Case diag1 = p.getCase(x1, y2);
-		Case diag2 = p.getCase(x2, y1);
-
-		return !coupsUrgents.containsKey(diag1) && !coupsUrgents.containsKey(diag2);
-	}
-
-	protected Case supprimerCoupesComblees(Case coup) {
-		Case reponse = coupsUrgents.remove(coup);
-		if (reponse != null)
-			coupsUrgents.remove(reponse);
-		return reponse;
 	}
 }

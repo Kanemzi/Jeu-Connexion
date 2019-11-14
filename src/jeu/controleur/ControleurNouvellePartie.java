@@ -25,6 +25,8 @@ public class ControleurNouvellePartie implements ActionListener {
 		parametres.afficher();
 		if (!parametres.valide()) return;
 		
+		if (jeu.getPartieActuelle() != null) jeu.getPartieActuelle().exit();
+
 		if (ordinateur) {
 			Partie p = jeu.JouerOrdiHumain(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax(), parametres.isOrdinateurCommence());
 			if (p.getJoueurTour().isOrdinateur()) {
@@ -32,6 +34,5 @@ public class ControleurNouvellePartie implements ActionListener {
 			}
 		} else 
 			jeu.JouerDeuxHumains(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax());
-		
 	}
 }
