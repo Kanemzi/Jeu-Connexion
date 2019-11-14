@@ -46,7 +46,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 	public Case jouer(Partie partie) {
 		Case coup = super.jouer(partie);
 		supprimerCoupesComblees(coup); // on supprime les coupes comblées par le dernier coup joué par l'ordinateur
-		System.out.println(getNom() + " urgents : " + coupsUrgents);
+		// System.out.println(getNom() + " urgents : " + coupsUrgents);
 		return coup;
 	}
 
@@ -65,6 +65,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 				return jouerCoupUrgent(dernierCoup);
 			}
 		}
+		
 		if (partie.getTour() <= 1) {
 			return choisirPremierCoup(partie);
 		}
@@ -74,14 +75,14 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 		switch (etat) {
 		case EXPANSION:
 			coup = meilleurCoupSansCoupe(partie);
-			if (coup == null)
-				etat = Etat.AGRESSIF;
-			break;
+			if (coup == null) etat = Etat.AGRESSIF;
+			else break;
 		case AGRESSIF:
 			coup = meilleurCoupValeurContact(partie);
 			// if (partie.getPlateau().getCasesAdjacentes(coup, adversaire).isEmpty())
 			// etat = Etat.EXPANSION;
 		}
+
 		return coup;
 	}
 
@@ -93,7 +94,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 		Case coup = null;
 		Case liaison = null;
 		float valeurMax = 0.0f;
-		
+		// System.out.println("skip ?" + groupePrincipal);
 		for (Case c : groupePrincipal) {
 			List<Case> adjacentesVides = partie.getPlateau().getCasesAutour(c, null);
 			for (Case vide : adjacentesVides) {
