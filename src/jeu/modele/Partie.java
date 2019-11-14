@@ -13,6 +13,7 @@ import jeu.modele.analyse.AnalyseUtils;
 import jeu.modele.ordinateurs.Ordinateur;
 import jeu.modele.ordinateurs.OrdinateurAleatoire;
 import jeu.modele.ordinateurs.OrdinateurExpansionRapide;
+import jeu.modele.ordinateurs.OrdinateurLimitationEnfermement;
 import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent;
 import jeu.vue.VueJeu;
 
@@ -59,7 +60,7 @@ public class Partie {
 		}
 		
 		if (ordinateur) {
-			if (!Config.TEST) joueurs[1] = new OrdinateurExpansionRapide(1, nom2, Color.blue);
+			if (!Config.TEST) joueurs[1] = new OrdinateurLimitationEnfermement(1, nom2, Color.blue);
 			else {
 				try {
 					joueurs[1] = (Joueur) Config.ORDI_BLEU.getDeclaredConstructor(int.class, String.class, Color.class)
