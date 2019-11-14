@@ -45,7 +45,7 @@ public class Partie {
 	
 	public Partie(int n, int max, String nom1, String nom2, boolean ordinateur) {
 		this();
-		joueurs[0] = new Joueur(0, nom1, Color.red);
+		joueurs[0] = new OrdinateurMeilleurCoupAdjacent(0, nom1, Color.red);
 		if (ordinateur) {
 			joueurs[1] = new OrdinateurExpansionRapide(1, nom2, Color.blue);
 		} else {
@@ -116,7 +116,6 @@ public class Partie {
 		 * Clic sur une case non occupée
 		 */
 		Joueur joueurTour = getJoueurTour();
-		System.out.println(joueurTour.getNom());
 
 		if (caseCliquee == null)
 			caseCliquee = ((Ordinateur) joueurTour).jouer(this);

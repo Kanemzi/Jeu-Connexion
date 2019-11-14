@@ -2,9 +2,8 @@ package jeu.modele.ordinateurs;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import jeu.Config;
 import jeu.modele.Case;
@@ -12,30 +11,33 @@ import jeu.modele.Partie;
 import jeu.modele.analyse.AnalyseUtils;
 
 /**
- * Niveau 1
- * Ordinateur un peu plus avancé, ne joue que des coups adjacents à son groupe principal.
- * Le coup choisi est celui apportant le plus de points localement (somme des valeurs des cases à une distance de 1)
+ * Niveau 1 Ordinateur un peu plus avancé, ne joue que des coups adjacents à son
+ * groupe principal. Le coup choisi est celui apportant le plus de points
+ * localement (somme des valeurs des cases à une distance de 1)
  * 
- * Lorsqu'aucun coup adjacent n'est possible, un coup aléatoire est joué
+ * Lorsqu'aucun coup adjacent n'est possible, l'ordinateur passe en mode
+ * "agressif" et va uniquement tenter de couper les groupes de l'adversaire sans
+ * forcément donner de l'importance à la formation de nouveaux groupes
+ * 
  */
 public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 
-	enum Etat {
-		INFLUENCE, // L'ordinateur cherche à se développer au maximum sur le plateau et à réduire
-					// l'adversaire
-		REMPLISSAGE // L'ordinateur cherche à rejoindre les groupes de cases les plus "lourds" tout
-					// en réduisant l'intérieur du territoire adversaire si cela vaut plus de points
+	protected enum Etat {
+		EXPANSION,
+		AGRESSIF
 	}
-
+	
 	protected Etat etat;
+	
+	protected Set<Case> groupePrincipal; // l'ensemble des cases liées directement ou indirectement au groupe principal
+											// construit
 
 	// memoire de l'IA
 	protected List<Case> coupsImportants; // coups à jouer de préférence avant l'adversaire (coupe de deux groupes)
-	
 
 	public OrdinateurMeilleurCoupAdjacent(int id, String nom, Color couleur) {
 		super(id, nom, couleur);
-		etat = Etat.INFLUENCE;
+		etat = Etat.EXPANSION;
 	}
 
 	/**
@@ -49,33 +51,38 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 	/**
 	 * Choisit le prochain coup à jouer
 	 * 
-	 * @param partie
-	 *            la partie en cours
+	 * @param partie la partie en cours
 	 * @return la case à jouer
 	 */
 	@Override
 	public Case choisirCoup(Partie partie) {
-		/*
-		 * Case dernierCoup = partie.getDernierCoup();
-		 * 
-		 * if (dernierCoup != null) { // obligatoirement un coup de l'adversaire if
-		 * (coupsUrgents.containsKey(dernierCoup)) { // réponse urgente à jouer Case
-		 * reponse = coupsUrgents.remove(dernierCoup); coupsUrgents.remove(reponse);
-		 * return reponse; } }
-		 */
 		if (partie.getTour() <= 1) {
 			return choisirPremierCoup(partie);
 		}
-
-		return meilleurCoupAdjacent(partie);
+		
+		Case coup;
+		
+		switch(etat) {
+		case EXPANSION:
+			coup = meilleurCoupAdjacent(partie);
+			if (coup != null) return coup;
+			etat = Etat.AGRESSIF;
+		case AGRESSIF:
+			coup = meilleurCoupValeurContact(partie);
+			//if (partie.getPlateau().getCasesAdjacentes(coup, adversaire).isEmpty())
+			//	etat = Etat.EXPANSION;
+			return coup;
+			
+		}
+		
+		return null;
 	}
 
 	/**
 	 * Choisit le premier coup à jouer. Le premier coup est très important et peut
 	 * être décisif, il possède donc une fonction dédiée.
 	 * 
-	 * @param plateau
-	 *            le plateau du jeu
+	 * @param plateau le plateau du jeu
 	 * @return le premier coup à jouer
 	 */
 	public Case choisirPremierCoup(Partie partie) {
@@ -122,12 +129,13 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 	}
 
 	/**
-	 * Jouer le meilleur coup possible localement sur le plateau et adjacent à un groupe déjà créé (sans coupe indirecte)
+	 * Jouer le meilleur coup possible localement sur le plateau et adjacent à un
+	 * groupe déjà créé (sans coupe indirecte)
 	 */
 	public Case meilleurCoupAdjacent(Partie partie) {
 		Case coup = null;
 		float valeurCoup = 0.0f;
-		
+
 		for (Case c : coupsRestants) {
 			List<Case> adjacents = partie.getPlateau().getCasesAdjacentes(c, this);
 			if (!adjacents.isEmpty()) {
@@ -142,7 +150,61 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 		if (coup != null)
 			return coup;
 
-		// si aucun coup safe possible, jouer un coup aléatoire
-		return coupAleatoire(partie);
+		return null;
+	}
+
+	/**
+	 * Retourne l'un des meilleurs coup sur le plateau par rapport à la valeur
+	 * moyenne de ses coups voisins
+	 */
+	public Case meilleurCoupValeur(Partie partie) {
+		Case coup = null;
+		float valeurCoup = 0.0f;
+		for (Case c : coupsRestants) {
+			float valeur = AnalyseUtils.poidsEmplacement(partie.getPlateau(), c);
+			if (valeur > valeurCoup) {
+				valeurCoup = valeur;
+				coup = c;
+			}
+		}
+
+		return coup;
+	}
+
+	/**
+	 * Retourne l'un des meilleurs coup sur le plateau par rapport à la valeur
+	 * moyenne de ses coups voisins Joue en priorité (à une valeur de k près) un
+	 * coup adjacent à un groupe adversaire afin de maximiser les chances de bloquer
+	 * son expansion Une plus grande importance est donnée aux coups ayant 2 ou 3
+	 * cases adversaire adjacentes (plus grande probabilité de de couper des groupes
+	 * chez un joueur agressif) 4 cases adversaire adjacentes peuvent à l'inverse
+	 * plus souvent être dues à une valeur de case peu intéressante (on ignore ces
+	 * cases)
+	 */
+	public Case meilleurCoupValeurContact(Partie partie) {
+		Case coup = null;
+		float valeurCoup = 0.0f;
+
+		for (Case c : coupsRestants) {
+			float valeur = AnalyseUtils.poidsEmplacement(partie.getPlateau(), c);
+
+			List<Case> adjacents = partie.getPlateau().getCasesAdjacentes(c, adversaire); // cases adversaires
+																							// adjacentes
+
+			if (!adjacents.isEmpty()) {
+				valeur += partie.getPlateau().getMax(); // on attribue une plus grande valeur à une case adjacente
+
+				int nbAdj = adjacents.size();
+				if (nbAdj < 4)
+					valeur *= nbAdj;
+			}
+
+			if (valeur > valeurCoup) {
+				valeurCoup = valeur;
+				coup = c;
+			}
+		}
+
+		return coup;
 	}
 }

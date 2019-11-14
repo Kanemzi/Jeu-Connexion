@@ -9,24 +9,19 @@ import jeu.modele.Case;
 import jeu.modele.Partie;
 import jeu.modele.Plateau;
 import jeu.modele.analyse.AnalyseUtils;
-import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent.Etat;
 
 /**
- * Niveau 2 Ordinateur choisissant toujours la case apportant le plus de points
- * localement. A la différence de l'ordinateur de niveau 1, celui-ci peut
- * s'étendre en diagonale afin de chercher plus rapidement les foyers de points
- * importants. Cet ordinateur sait se protéger des coupes de son adversaire sur
- * ses coups en diagonale
+ * Niveau 3
+ * Ordinateur utilisant la même stratégie que l'ordinateur Niveau 2, lorsque l'aderversaire joue un coup risqué ayant pour but d'enfermer 
+ * le groupe principal, l'Ordinateur coupe le joueur.
  * 
- * Lorsqu'aucun coup adjacent ou en diagonale n'est possible, un coup aléatoire
- * est joué
  */
-public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
+public class OrdinateurLimitationEnfermemenent extends OrdinateurMeilleurCoupAdjacent {
 
 	protected Map<Case, Case> coupsUrgents; // réactions immédiates à des coups de l'adersaire (menace de coupe par
 											// exemple)
 
-	public OrdinateurExpansionRapide(int id, String nom, Color couleur) {
+	public OrdinateurLimitationEnfermemenent(int id, String nom, Color couleur) {
 		super(id, nom, couleur);
 	}
 
@@ -41,14 +36,15 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 	/**
 	 * Permet à l'ordinateur de jouer un coup sur le plateau
 	 * 
-	 * @param partie la partie en cours
+	 * @param partie
+	 *            la partie en cours
 	 */
 	public Case jouer(Partie partie) {
 		Case coup = super.jouer(partie);
 		supprimerCoupesComblees(coup); // on supprime les coupes comblées par le dernier coup joué par l'ordinateur
 		return coup;
 	}
-
+	
 	/**
 	 * Choisit le prochain coup à jouer
 	 * 
@@ -68,23 +64,17 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 			return choisirPremierCoup(partie);
 		}
 
-		Case coup;
-
-		switch (etat) {
-		case EXPANSION:
-			coup = meilleurCoupSansCoupe(partie);
-			if (coup != null)
-				return coup;
-			etat = Etat.AGRESSIF;
-		case AGRESSIF:
-			coup = meilleurCoupValeurContact(partie);
-			// if (partie.getPlateau().getCasesAdjacentes(coup, adversaire).isEmpty())
-			// etat = Etat.EXPANSION;
-			return coup;
-
-		}
-
-		return null;
+		// vérifie si le dernier coup peut être coupé en 1 coup
+		/**
+		 * OX   XO   O   .O
+		 * /O   O/   /   //     ...
+		 *           O   O.
+		 *           
+		 *           
+		 * diagonalePleine(joueur O) -> vérifie si la diagonale formée par les cases de O peut être coupée en un coup par X
+		 */
+		
+		return meilleurCoupSansCoupe(partie);
 	}
 
 	/**
@@ -139,8 +129,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 	}
 
 	public Case jouerCoupUrgent(Case coup) {
-		Case reponse = supprimerCoupesComblees(coup); // on supprime le coup opposé car celui-ci est à présent rempli
-														// par un joueur
+		Case reponse = supprimerCoupesComblees(coup); // on supprime le coup opposé car celui-ci est à présent rempli par un joueur
 		return reponse;
 	}
 
@@ -153,11 +142,10 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 
 		return !coupsUrgents.containsKey(diag1) && !coupsUrgents.containsKey(diag2);
 	}
-
+	
 	protected Case supprimerCoupesComblees(Case coup) {
 		Case reponse = coupsUrgents.remove(coup);
-		if (reponse != null)
-			coupsUrgents.remove(reponse);
+		if (reponse != null) coupsUrgents.remove(reponse); 
 		return reponse;
 	}
 }

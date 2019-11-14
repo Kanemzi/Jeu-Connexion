@@ -1,17 +1,22 @@
 package jeu.modele.ordinateurs;
 
 import java.awt.Color;
+import java.util.Random;
 
 import jeu.modele.Case;
 import jeu.modele.Partie;
 
 /**
  * Niveau 0
- * Ordinateur adoptant la stratégie la plus basique possible, consistant à jouer un coup aléatoirement sur le plateau
+ * Ordinateur adoptant la stratégie la plus basique possible, consistant à jouer un coup aléatoirement sur le plateau à chaque tour
  */
 public class OrdinateurAleatoire extends Ordinateur {
+	
+	private Random ran;
+	
 	public OrdinateurAleatoire(int id, String nom, Color couleur) {
 		super(id, nom, couleur);
+		ran = new Random();
 	}
 	
 	public Case choisirCoup(Partie partie) {
@@ -22,12 +27,12 @@ public class OrdinateurAleatoire extends Ordinateur {
 	 * Jouer un coup aléatoire libre sur le plateau
 	 */
 	public Case coupAleatoire(Partie partie) {
-		// prend le premier élément stocké dans les coups restants
+		int id = ran.nextInt(coupsRestants.size());
 		for (Case c : coupsRestants) {
-			return c;
+			if(id-- == 0) {
+				return c;
+			}
 		}
-
-		// ne doit en théorie jamais arriver
 		return null;
-	}	
+	}
 }
