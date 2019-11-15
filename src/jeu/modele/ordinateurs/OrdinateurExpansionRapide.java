@@ -1,6 +1,7 @@
 package jeu.modele.ordinateurs;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,6 @@ import jeu.modele.Case;
 import jeu.modele.Partie;
 import jeu.modele.Plateau;
 import jeu.modele.analyse.AnalyseUtils;
-import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent.Etat;
 
 /**
  * Niveau 2 Ordinateur choisissant toujours la case apportant le plus de points
@@ -60,7 +60,7 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 	public Case choisirCoup(Partie partie) {
 		Case dernierCoup = partie.getDernierCoup();
 
-		if (dernierCoup != null) { // obligatoirement un coup de l'adversaire if
+		if (dernierCoup != null) { // obligatoirement un coup de l'adversaire
 			if (coupsUrgents.containsKey(dernierCoup)) { // réponse urgente à jouer Case
 				return jouerCoupUrgent(dernierCoup);
 			}
@@ -176,5 +176,20 @@ public class OrdinateurExpansionRapide extends OrdinateurMeilleurCoupAdjacent {
 		if (reponse != null)
 			coupsUrgents.remove(reponse);
 		return reponse;
+	}
+	
+	protected List<Case> diagonalesInversees(Partie partie, Case case1, Case case2) {
+		
+		List<Case> diags = new ArrayList<>(2);
+		int x1 = case1.getX(), y1 = case1.getY();
+		int x2 = case2.getX(), y2 = case2.getY();
+
+		Case diag1 = partie.getPlateau().getCase(x1, y2);
+		Case diag2 = partie.getPlateau().getCase(x2, y1);
+
+		diags.add(diag1);
+		diags.add(diag2);
+		
+		return diags;
 	}
 }

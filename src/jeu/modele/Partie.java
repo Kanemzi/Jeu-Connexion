@@ -14,6 +14,7 @@ import jeu.modele.ordinateurs.Ordinateur;
 import jeu.modele.ordinateurs.OrdinateurExpansionRapide;
 import jeu.modele.ordinateurs.OrdinateurLimitationEnfermement;
 import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent;
+import jeu.modele.ordinateurs.OrdinateurPunitionRisque;
 import jeu.vue.VueJeu;
 
 public class Partie {
@@ -61,7 +62,7 @@ public class Partie {
 		}
 		
 		if (ordinateur) {
-			if (!Config.TEST) joueurs[1] = new OrdinateurLimitationEnfermement(1, nom2, Color.blue);
+			if (!Config.TEST) joueurs[1] = new OrdinateurPunitionRisque(1, nom2, Color.blue);
 			else {
 				try {
 					joueurs[1] = (Joueur) Config.ORDI_BLEU.getDeclaredConstructor(int.class, String.class, Color.class)
