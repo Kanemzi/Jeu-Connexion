@@ -26,9 +26,9 @@ public class OrdinateurLimitationEnfermement extends OrdinateurExpansionRapide {
 	 * de coupe directe potentielle dans le groupe de l'ordinateur
 	 */
 	public Case meilleurCoupSansCoupe(Partie partie) {
-		Case coup = null, liaison = null;
-		float valeurCoup = 0.0f;
-
+		//Case coup = null, liaison = null;
+		//float valeurCoup = 0.0f;
+/*
 		for (Case c : coupsRestants) {
 			float val = AnalyseUtils.poidsEmplacement(partie.getPlateau(), c);
 			
@@ -46,7 +46,7 @@ public class OrdinateurLimitationEnfermement extends OrdinateurExpansionRapide {
 				if (sansCoupe && verificationDoubleCoupe(partie.getPlateau(), c, a)) { // si le coup peut se lier à un
 																						// coup déjà joué sans coupe
 																						// possible
-					valeurCoup = val;
+					valeurMax = val;
 					coup = c;
 					if (AnalyseUtils.coupEnDiagonaleStricte(partie.getPlateau(), a, c)) {
 						liaison = a;
@@ -54,6 +54,36 @@ public class OrdinateurLimitationEnfermement extends OrdinateurExpansionRapide {
 						liaison = null;
 					}
 					break;
+				}
+			}
+		}*/
+		
+		Case coup = null;
+		Case liaison = null;
+		float valeurMax = 0.0f;
+		// System.out.println("skip ?" + groupePrincipal);
+		for (Case c : groupePrincipal) {
+			List<Case> adjacentesVides = partie.getPlateau().getCasesAutour(c, null);
+			for (Case vide : adjacentesVides) {
+				float valeur = AnalyseUtils.poidsEmplacement(partie.getPlateau(), vide);
+				
+				List<Case> adjacents = partie.getPlateau().getCasesAdjacentes(vide, adversaire);
+				int mult = partie.getPlateau().getMax();
+				if (!adjacents.isEmpty()) valeur += 1000 * mult * mult; // grande priorité aux coups de contact en début de partie
+				
+				if (valeur <= valeurMax)
+					continue;
+
+				boolean sansCoupe = AnalyseUtils.coupLiable(partie.getPlateau(), c, vide);
+				if (sansCoupe && verificationDoubleCoupe(partie.getPlateau(), vide, c)) {
+					valeurMax = valeur;
+					coup = vide;
+
+					if (AnalyseUtils.coupEnDiagonaleVide(partie.getPlateau(), c, vide)) {
+						liaison = c;
+					} else { // le coup le plus rentable jusque la n'est pas une diagonale
+						liaison = null;
+					}
 				}
 			}
 		}

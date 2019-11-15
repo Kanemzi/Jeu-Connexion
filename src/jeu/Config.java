@@ -1,6 +1,7 @@
 package jeu;
 
 import jeu.modele.ordinateurs.Ordinateur;
+import jeu.modele.ordinateurs.OrdinateurAleatoire;
 import jeu.modele.ordinateurs.OrdinateurExpansionRapide;
 import jeu.modele.ordinateurs.OrdinateurLimitationEnfermement;
 import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent;
@@ -20,6 +21,6 @@ public class Config {
 	public static final int TAILLE_GRILLE = 8;
 	public static final int MAX_VALEUR = 2;
 	public static final boolean BLEU_COMMENCE = false;
-	public static final Class<? extends Ordinateur> ORDI_ROUGE = OrdinateurExpansionRapide.class;
-	public static final Class<? extends Ordinateur> ORDI_BLEU = OrdinateurMeilleurCoupAdjacent.class;
+	public static final Class<? extends Ordinateur> ORDI_ROUGE = OrdinateurMeilleurCoupAdjacent.class;
+	public static final Class<? extends Ordinateur> ORDI_BLEU = OrdinateurLimitationEnfermement.class;
 }

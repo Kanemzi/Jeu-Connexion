@@ -10,6 +10,7 @@ import jeu.Config;
 import jeu.modele.Case;
 import jeu.modele.Partie;
 import jeu.modele.analyse.AnalyseUtils;
+import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent.Etat;
 
 /**
  * Niveau 1 Ordinateur un peu plus avancé, ne joue que des coups adjacents à son
@@ -61,21 +62,20 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 			return choisirPremierCoup(partie);
 		}
 
-		Case coup;
+		Case coup = null;
 
 		switch (etat) {
 		case EXPANSION:
 			coup = meilleurCoupAdjacent(partie);
-			if (coup != null)
-				return coup;
-			etat = Etat.AGRESSIF;
+			if (coup == null)
+				etat = Etat.AGRESSIF;
+			else
+				break;
 		case AGRESSIF:
 			coup = meilleurCoupValeurContact(partie);
-			return coup;
-
 		}
 
-		return null;
+		return coup;
 	}
 
 	/**
@@ -110,8 +110,6 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 			}
 		}
 
-		System.out.println(idmeilleur + " " + idsecond);
-		
 		int xmeilleur = idmeilleur % 2;
 		int ymeilleur = idmeilleur / 2;
 

@@ -33,8 +33,6 @@ public class ControleurSelectionCase implements ActionListener {
 		BoutonCase selection = (BoutonCase) ev.getSource();
 		Case caseCliquee = modele.getPlateau().getCase(selection.getCaseX(), selection.getCaseY());
 
-		System.out.println("NIVEAU : " + AnalyseUtils.hauteurCase(modele.getPlateau(), caseCliquee));
-		
 		/**
 		 * Clic sur une case déjà occupée -> on met en surbrillance le groupe sur lequel
 		 * le joueur a cliqué et on affiche le score du groupe
