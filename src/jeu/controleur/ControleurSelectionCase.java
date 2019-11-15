@@ -59,7 +59,7 @@ public class ControleurSelectionCase implements ActionListener {
 
 			return;
 		}
-
+		
 		modele.jouerTour(caseCliquee, vue);
 	}
 }

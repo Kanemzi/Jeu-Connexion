@@ -29,6 +29,26 @@ public class AnalyseUtils {
 
 		return Math.min(hx, hy);
 	}
+	
+	/**
+	 * Retourne la force d'une position par rapport à la proportion du plateau qu'elle couvre
+	 * 
+	 * @param p
+	 *            le plateau de la partie en cours
+	 * @param c
+	 *            la case dont il faut récupérer l'influence
+	 * @return l'influence de la case c
+	 */
+	public static int influenceCase(Plateau p, Case c) {
+		int taille = p.getTaille();
+		int x = c.getX();
+		int y = c.getY();
+
+		int hx = ((x < taille / 2) ? x : taille - x - 1) + 1;
+		int hy = ((y < taille / 2) ? y : taille - y - 1) + 1;
+
+		return hx * hy;
+	}
 
 	/**
 	 * Calcule le poids d'un emplacement sur le plateau à un certain tour de la
@@ -55,7 +75,7 @@ public class AnalyseUtils {
 					poids += adj.getValeur();
 			}
 		}
-		return poids;
+		return poids / 2; // seule la moitié des cases peut en théorie être prise contre un joueur agressif
 	}
 
 	/**

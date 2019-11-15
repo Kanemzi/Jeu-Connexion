@@ -62,14 +62,20 @@ public class OrdinateurLimitationEnfermement extends OrdinateurExpansionRapide {
 		Case liaison = null;
 		float valeurMax = 0.0f;
 		// System.out.println("skip ?" + groupePrincipal);
+		// System.out.println("NEW TOUR");
 		for (Case c : groupePrincipal) {
 			List<Case> adjacentesVides = partie.getPlateau().getCasesAutour(c, null);
 			for (Case vide : adjacentesVides) {
 				float valeur = AnalyseUtils.poidsEmplacement(partie.getPlateau(), vide);
-				
+				// System.out.println("_________Case : " + vide);
+				// System.out.println("valeur brute : " + valeur);
 				List<Case> adjacents = partie.getPlateau().getCasesAdjacentes(vide, adversaire);
-				int mult = partie.getPlateau().getMax();
-				if (!adjacents.isEmpty()) valeur += 1000 * mult * mult; // grande priorité aux coups de contact en début de partie
+				int moyenne = partie.getPlateau().getMax();
+				if (!adjacents.isEmpty()) {
+					valeur += AnalyseUtils.influenceCase(partie.getPlateau(), vide) * moyenne; // grande priorité aux coups de contact en début de partie
+					// System.out.println("+ adjacence : " + (AnalyseUtils.influenceCase(partie.getPlateau(), vide) * moyenne));
+				}
+				// System.out.println("Valeur finale : " + valeur);
 				
 				if (valeur <= valeurMax)
 					continue;

@@ -8,7 +8,7 @@ import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent;
 
 public class Config {
 	public static final int WINDOW_SIZE = 600;
-	public static final int TEMPS_REPONSE_ORDINATEUR = 0;
+	public static final int TEMPS_REPONSE_ORDINATEUR = 1;
 	
 	// Ordinateur
 	public static final float COEF_BORDURES_PETIT = .45f;
@@ -21,6 +21,6 @@ public class Config {
 	public static final int TAILLE_GRILLE = 8;
 	public static final int MAX_VALEUR = 2;
 	public static final boolean BLEU_COMMENCE = false;
-	public static final Class<? extends Ordinateur> ORDI_ROUGE = OrdinateurMeilleurCoupAdjacent.class;
+	public static final Class<? extends Ordinateur> ORDI_ROUGE = OrdinateurExpansionRapide.class;
 	public static final Class<? extends Ordinateur> ORDI_BLEU = OrdinateurLimitationEnfermement.class;
 }
