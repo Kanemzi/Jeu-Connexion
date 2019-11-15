@@ -196,7 +196,7 @@ public class AnalyseUtils {
 	 * @param coup2 le coup que le joueur souhaiter jouer
 	 */
 	public static boolean coupLiable(Plateau p, Case coup1, Case coup2) {
-		if (coup1.getProprietaire() == coup2.getProprietaire()) return false;
+		// if (coup1.getProprietaire() == coup2.getProprietaire()) return false;
 		if (!coupEnDiagonale(coup1, coup2)) return true; // mouvement adjacent sans coupes
 		Joueur joueurCoup = coup1.getProprietaire();
 		int x1 = coup1.getX(), y1 = coup1.getY();
