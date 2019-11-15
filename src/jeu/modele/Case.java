@@ -22,6 +22,8 @@ public class Case extends Observable {
 	// une estimation de la profondeur de l'arbre.
 	// Calculer la hauteur exacte à chaque fois rajouterait une complexité supplémentaire, d'autant plus que l'arbre est régulièrement applati
 	private int profondeur; 
+	
+	protected int scoreArbre;
 
 	/**
 	 * Crée une nouvelle case sur le plateau
@@ -38,22 +40,33 @@ public class Case extends Observable {
 		parent = null;
 		enfants = new LinkedList<>(); // ajouts et suppressions en temps constant
 		profondeur = 0;
+		scoreArbre = valeur;
 	}
 	
 	/**
 	 * Relie la case avec une autre
 	 * On suppose que les deux cases ne sont pas déjà liées (afin de conserver une complexité constante)
 	 * On suppose également que la case et c sont des représentants de leur groupe
+	 * La fonctione met également les scores à jour
 	 * @param c la case à relier
 	 * @return retourne le représentant du nouveau groupe créé
 	 */
 	public Case union(Case c) {
 		if (profondeur < c.profondeur) {
+			Case p = parent;
 			setParent(c);
+			if (p == null) {
+				parent.scoreArbre += scoreArbre;
+			}
 			return c;
 		}
 		
+		Case p = c.getParent();
 		c.setParent(this);
+		if (p == null) {
+			scoreArbre += c.scoreArbre;
+		}
+	
 		if (profondeur == c.profondeur)
 			profondeur = c.profondeur + 1;
 		
@@ -86,11 +99,7 @@ public class Case extends Observable {
 	 * @return retourne le score contenu dans le sous arbre de la classe (case inclue)
 	 */
 	public int getScoreArbre() {
-		int compteur = valeur;
-		for (Case enfant : enfants) {
-			compteur += enfant.getScoreArbre();
-		}
-		return compteur;
+		return scoreArbre;
 	}
 	
 	public Joueur getProprietaire() {

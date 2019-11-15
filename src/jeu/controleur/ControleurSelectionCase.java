@@ -41,6 +41,7 @@ public class ControleurSelectionCase implements ActionListener {
 			vue.getOverlay().setCasesSurbrillances(
 					modele.getPlateau().AfficherComposante(caseCliquee.getX(), caseCliquee.getY()));
 
+			System.out.println("taille composante : " + modele.getPlateau().AfficherComposante(caseCliquee.getX(), caseCliquee.getY()).size());
 			JOptionPane.showMessageDialog(null,
 					"Le score de la composante sélectionnée est de "
 							+ modele.getPlateau().AfficherScore(caseCliquee.getX(), caseCliquee.getY()),
