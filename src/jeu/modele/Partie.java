@@ -234,7 +234,6 @@ public class Partie {
 			int idJoueur = c.getProprietaire().getId();
 			
 			int pointsComposante = getPlateau().AfficherScore(c.getX(), c.getY());
-			System.out.println("____\n regu: " + pointsComposante + "\nzob: " + c.classe().scoreArbre);
 			
 			if( pointsComposante > points[idJoueur])
 				points[idJoueur] = pointsComposante;
