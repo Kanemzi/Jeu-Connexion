@@ -31,10 +31,10 @@ public class JeuConnexion extends JFrame {
 		setVisible(true);
 	}
 	
-	public Partie JouerDeuxHumains(String nomJoueur1, String nomJoueur2, int taille, int max) {
+	public Partie JouerDeuxHumains(String nomJoueur1, String nomJoueur2, int taille, int max, boolean joueurCommence) {
 		if (vue != null) remove(vue);
 
-		partie = new Partie(taille, max, nomJoueur1, nomJoueur2, false, 1);
+		partie = new Partie(taille, max, nomJoueur1, nomJoueur2, false, joueurCommence ? 1 : 0);
 		//partie = new Partie("res/plateaux/Joueur 1-Joueur 2-1573566204059.cnx", nomJoueur1, nomJoueur2);
 		vue = new VueJeu(partie);
 		
@@ -82,10 +82,10 @@ public class JeuConnexion extends JFrame {
 		return partie;
 	}
 	
-	public Partie chargerDeuxHumains(String nomJoueur1, String nomJoueur2, String nomPartie) {
+	public Partie chargerDeuxHumains(String nomJoueur1, String nomJoueur2, String nomPartie, boolean joueurCommence) {
 		if (vue != null) remove(vue);
 
-		partie = new Partie(nomPartie, nomJoueur1, nomJoueur2, false, 1);
+		partie = new Partie(nomPartie, nomJoueur1, nomJoueur2, false, joueurCommence ? 1 : 0);
 		//partie = new Partie("res/plateaux/Joueur 1-Joueur 2-1573566204059.cnx", nomJoueur1, nomJoueur2);
 		vue = new VueJeu(partie);
 		

@@ -33,7 +33,7 @@ public class ControleurChargerPartie  implements ActionListener {
 					p.jouerTour(null, jeu.getVue());
 				}
 			} else 
-				jeu.chargerDeuxHumains(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getNomPartie());
+				jeu.chargerDeuxHumains(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getNomPartie(), parametres.isJoueurCommence());
 		}                                                                                                                                                                
 		
 		

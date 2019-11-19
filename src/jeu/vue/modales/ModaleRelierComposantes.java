@@ -38,11 +38,11 @@ public class ModaleRelierComposantes {
 		
 		formulaire.setLayout(new GridLayout(5, 2));
 		
-		proprietaire.add(bleu);
 		proprietaire.add(rouge);
-		
-		formulaire.add(bleu);
+		proprietaire.add(bleu);
+
 		formulaire.add(rouge);
+		formulaire.add(bleu);
 		
 		formulaire.add(new JLabel("coordX1" + ":"));
 		formulaire.add(coordX1);

@@ -16,7 +16,7 @@ public class Config {
 	public static final float COEF_BORDURES_GRAND = .25f;
 	public static final int LIMITE_PETIT = 5;
 	
-	public static final boolean TEST = true;
+	public static final boolean TEST = false;
 	public static final boolean VISIBLE = true;
 	public static final int TAILLE_ECHANTILLON = 1000;
 	public static final int TAILLE_GRILLE = 12;

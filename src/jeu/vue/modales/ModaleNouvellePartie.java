@@ -2,11 +2,13 @@ package jeu.vue.modales;
 
 import java.awt.GridLayout;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 public class ModaleNouvellePartie {
@@ -16,7 +18,10 @@ public class ModaleNouvellePartie {
 	private JTextField champJoueur2;
 	private JTextField champTaillePlateau;
 	private JTextField champValeurMax;
-	private JCheckBox ordinateurCommence;
+	//private JCheckBox ordinateurCommence;
+	private JRadioButton bleu;
+	private JRadioButton rouge;
+	private ButtonGroup proprietaire;
 	private boolean ordinateur;
 	private int resultat = JOptionPane.NO_OPTION;
 	
@@ -26,9 +31,19 @@ public class ModaleNouvellePartie {
 		champJoueur2 = new JTextField(ordinateur ? "Bip Boop" : "Joueur 2");
 		champTaillePlateau = new JTextField("8");
 		champValeurMax = new JTextField("2");
+		rouge = new JRadioButton("rouge", true);
+		bleu = new JRadioButton("bleu");
+				
+		proprietaire = new ButtonGroup();
 		formulaire = new JPanel();
 		
 		formulaire.setLayout(new GridLayout(5, 2));
+		
+		proprietaire.add(rouge);
+		proprietaire.add(bleu);
+		
+		formulaire.add(rouge);
+		formulaire.add(bleu);
 
 		formulaire.add(new JLabel(ordi ? "Nom joueur" : "Nom joueur 1" + ":"));
 		formulaire.add(champJoueur1);
@@ -36,11 +51,11 @@ public class ModaleNouvellePartie {
 		formulaire.add(new JLabel(ordi ? "Nom ordinateur" : "Nom joueur 2" + ":"));
 		formulaire.add(champJoueur2);
 		
-		if (ordinateur) {
+		/*if (ordinateur) {
 			ordinateurCommence = new JCheckBox("L'Ordinateur commence");
 			formulaire.add(ordinateurCommence);
 			formulaire.add(new JLabel(""));
-		}
+		}*/
 		
 		formulaire.add(new JLabel("Taille (n) :"));
 		formulaire.add(champTaillePlateau);
@@ -77,7 +92,14 @@ public class ModaleNouvellePartie {
 		return max < 1 ? 1 : max; 
 	}
 	
-	public boolean isOrdinateurCommence() {
+	/*public boolean isOrdinateurCommence() {
 		return ordinateur && ordinateurCommence.isSelected();
+	}*/
+	
+	public boolean isOrdinateurCommence() {
+		return ordinateur && bleu.isSelected();
+	}
+	public boolean isJoueurCommence() {
+		return bleu.isSelected();
 	}
 }

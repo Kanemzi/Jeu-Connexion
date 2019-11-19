@@ -33,6 +33,6 @@ public class ControleurNouvellePartie implements ActionListener {
 				p.jouerTour(null, jeu.getVue());
 			}
 		} else 
-			jeu.JouerDeuxHumains(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax());
+			jeu.JouerDeuxHumains(parametres.getNomJoueur1(), parametres.getNomJoueur2(), parametres.getTaillePlateau(), parametres.getValeurMax(), parametres.isJoueurCommence());
 	}
 }

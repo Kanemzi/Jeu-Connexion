@@ -17,7 +17,6 @@ public class ModaleChargerPartie {
 	private JTextField champJoueur1;
 	private JTextField champJoueur2;
 	private JTextField nomPartie;
-	private JCheckBox ordinateurCommence;
 	private boolean ordinateur;
 	private int resultat = JOptionPane.NO_OPTION;
 	private JRadioButton bleu;
@@ -41,11 +40,12 @@ public class ModaleChargerPartie {
 		
 		//formulaire.add(new JLabel("Qui commence ?"));
 		
-		proprietaire.add(bleu);
+	
 		proprietaire.add(rouge);
+		proprietaire.add(bleu);
 		
-		formulaire.add(bleu);
 		formulaire.add(rouge);
+		formulaire.add(bleu);
 		
 		formulaire.add(new JLabel ("Nom partie :"));
 		formulaire.add(nomPartie);
@@ -56,11 +56,11 @@ public class ModaleChargerPartie {
 		formulaire.add(new JLabel(ordi ? "Nom ordinateur" : "Nom joueur 2" + ":"));
 		formulaire.add(champJoueur2);
 		
-		if (ordinateur) {
+		/*if (ordinateur) {
 			ordinateurCommence = new JCheckBox("L'Ordinateur commence");
 			formulaire.add(ordinateurCommence);
 			formulaire.add(new JLabel(""));
-		}
+		}*/
 	}
 	
 	public void afficher() {
@@ -86,6 +86,9 @@ public class ModaleChargerPartie {
 		return partie;
 	}
 	public boolean isOrdinateurCommence() {
-		return ordinateur && ordinateurCommence.isSelected();
+		return ordinateur && bleu.isSelected();
+	}
+	public boolean isJoueurCommence() {
+		return bleu.isSelected();
 	}
 }
