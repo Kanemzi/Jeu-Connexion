@@ -9,7 +9,7 @@ import jeu.modele.ordinateurs.OrdinateurPunitionRisque;
 
 public class Config {
 	public static final int WINDOW_SIZE = 600;
-	public static final int TEMPS_REPONSE_ORDINATEUR = 20;
+	public static final int TEMPS_REPONSE_ORDINATEUR = 5;
 	
 	// Ordinateur
 	public static final float COEF_BORDURES_PETIT = .45f;
