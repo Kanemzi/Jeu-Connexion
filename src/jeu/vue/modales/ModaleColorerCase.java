@@ -44,7 +44,7 @@ public class ModaleColorerCase {
 		
 	}
 	public void afficher() {
-		resultat = JOptionPane.showConfirmDialog(null, formulaire, "Paramètres de la partie", JOptionPane.OK_CANCEL_OPTION);
+		resultat = JOptionPane.showConfirmDialog(null, formulaire, "Colorer Case", JOptionPane.OK_CANCEL_OPTION);
 	}
 	
 	public boolean valide() {

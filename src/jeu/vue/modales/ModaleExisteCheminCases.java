@@ -61,7 +61,7 @@ public class ModaleExisteCheminCases {
 	}
 	
 	public void afficher() {
-		resultat = JOptionPane.showConfirmDialog(null, formulaire, "Paramètres de la partie", JOptionPane.OK_CANCEL_OPTION);
+		resultat = JOptionPane.showConfirmDialog(null, formulaire, "Existe Chemin Cases", JOptionPane.OK_CANCEL_OPTION);
 	}
 	
 	public boolean valide() {
