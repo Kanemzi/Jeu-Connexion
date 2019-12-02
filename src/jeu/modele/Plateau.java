@@ -205,8 +205,7 @@ public class Plateau {
 	}
 
 	/**
-	 * Retourne le score total d'une composante O(n) : avec n le nombre de cases
-	 * dans la composante
+	 * Retourne le score total d'une composante O(1)
 	 * 
 	 * @param x
 	 *            la position horizontale de la case à tester
