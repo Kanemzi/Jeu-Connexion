@@ -61,7 +61,7 @@ public class ModaleRelierComposantes {
 	}
 	
 	public void afficher() {
-		resultat = JOptionPane.showConfirmDialog(null, formulaire, "Relier deux composantes", JOptionPane.OK_CANCEL_OPTION);
+		resultat = JOptionPane.showConfirmDialog(null, formulaire, "Relier Composantes", JOptionPane.OK_CANCEL_OPTION);
 	}
 	
 	public boolean valide() {
