@@ -1,10 +1,7 @@
 package jeu;
 
 import jeu.modele.ordinateurs.Ordinateur;
-import jeu.modele.ordinateurs.OrdinateurAleatoire;
 import jeu.modele.ordinateurs.OrdinateurExpansionRapide;
-import jeu.modele.ordinateurs.OrdinateurLimitationEnfermement;
-import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent;
 import jeu.modele.ordinateurs.OrdinateurPunitionRisque;
 
 public class Config {

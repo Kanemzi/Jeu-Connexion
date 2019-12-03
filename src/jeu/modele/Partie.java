@@ -11,8 +11,6 @@ import javax.swing.JOptionPane;
 import jeu.Config;
 import jeu.modele.analyse.AnalyseUtils;
 import jeu.modele.ordinateurs.Ordinateur;
-import jeu.modele.ordinateurs.OrdinateurExpansionRapide;
-import jeu.modele.ordinateurs.OrdinateurLimitationEnfermement;
 import jeu.modele.ordinateurs.OrdinateurMeilleurCoupAdjacent;
 import jeu.modele.ordinateurs.OrdinateurPunitionRisque;
 import jeu.vue.VueJeu;
@@ -20,8 +18,6 @@ import jeu.vue.VueJeu;
 public class Partie {
 	private Plateau plateau;
 	private Joueur[] joueurs;
-	
-	private int[] points;
 	
 	private int tour;
 	private int maxTours;
@@ -238,8 +234,6 @@ public class Partie {
 			if( pointsComposante > points[idJoueur])
 				points[idJoueur] = pointsComposante;
 		}
-		
-		this.points = points;
 		
 		return points;
 	}

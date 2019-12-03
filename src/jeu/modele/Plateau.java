@@ -92,6 +92,8 @@ public class Plateau {
 	 * partie O(log max(cs)) : avec cs les tailles des composantes adjacentes à la
 	 * case coloriée -> dans la pratique, complexité constante
 	 * 
+	 * Précondition : la case ne doit pas déjà appartenir à un joueur
+	 * 
 	 * @param x
 	 *            la position horizontale de la case à colorier
 	 * @param y
