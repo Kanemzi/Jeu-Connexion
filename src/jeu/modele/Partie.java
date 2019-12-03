@@ -81,7 +81,7 @@ public class Partie {
 		this();
 		joueurs[0] = new Joueur(0, nom1, Color.red);
 		if (ordinateur) {
-			joueurs[1] = new OrdinateurMeilleurCoupAdjacent(1, nom2, Color.blue);
+			joueurs[1] = new OrdinateurPunitionRisque(1, nom2, Color.blue);
 		} else {
 			joueurs[1] = new Joueur(1, nom2, Color.blue);					
 		}

@@ -3,6 +3,8 @@ package jeu.controleur;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
+
 import jeu.modele.Case;
 import jeu.modele.Joueur;
 import jeu.modele.Partie;
@@ -22,19 +24,13 @@ public class ControleurRelierComposantes  implements ActionListener {
 		parametres.afficher();
 		if (!parametres.valide()) return;
 
-		
-		Case c1 = partie.getPlateau().getCase(parametres.getX1(), parametres.getY1());
-		Case c2 = partie.getPlateau().getCase(parametres.getX2(), parametres.getY2());
-		Joueur joueur = partie.getJoueurs()[parametres.getProprietaire()];
+		Joueur j = partie.getJoueurs()[parametres.getProprietaire()];
+		Case c = partie.getPlateau().getCase(parametres.getX1(), parametres.getY1());
 
-		if(c1.getProprietaire() == c2.getProprietaire() && c1.getProprietaire().getId() == parametres.getProprietaire()) {
-				
-			Case[] representants = partie.getPlateau().ExisteCheminCases(c1, c2, joueur);
-			boolean liees = (representants == null);
-			
-			if (!liees) {
-				representants[0].union(representants[1]);
-			}
-		}
+	
+		boolean relier = partie.getPlateau().RelierComposantes(parametres.getX1(), parametres.getY1(), j, false);
+		JOptionPane.showMessageDialog(null,
+				(relier) ? "le coup relie plusieurs composantes" : "le coup ne relie pas de composantes",
+				"Relier composantes", JOptionPane.PLAIN_MESSAGE);
 	}
 }

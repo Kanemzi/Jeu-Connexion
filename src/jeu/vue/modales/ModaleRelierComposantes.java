@@ -14,8 +14,6 @@ public class ModaleRelierComposantes {
 	private JPanel formulaire;
 	private JTextField coordX1;
 	private JTextField coordY1;
-	private JTextField coordX2;
-	private JTextField coordY2;
 	private JRadioButton bleu;
 	private JRadioButton rouge;
 	private ButtonGroup proprietaire;
@@ -25,10 +23,7 @@ public class ModaleRelierComposantes {
 	public ModaleRelierComposantes(){
 		coordX1 = new JTextField();
 		coordY1 = new JTextField();
-		
-		coordX2 = new JTextField();
-		coordY2 = new JTextField();
-		
+	
 		rouge = new JRadioButton("rouge", true);
 		bleu = new JRadioButton("bleu");
 				
@@ -49,15 +44,6 @@ public class ModaleRelierComposantes {
 		
 		formulaire.add(new JLabel("coordY1" + ":"));
 		formulaire.add(coordY1);
-		
-		formulaire.add(new JLabel("coordX2" + ":"));
-		formulaire.add(coordX2);
-		
-		formulaire.add(new JLabel("coordY2" + ":"));
-		formulaire.add(coordY2);
-		
-		
-		
 	}
 	
 	public void afficher() {
@@ -74,14 +60,6 @@ public class ModaleRelierComposantes {
 	}
 	public int getY1() {
 		int y = Integer.parseInt(coordY1.getText());
-		return y >= 1 ? y-1 : 0;
-	}
-	public int getX2() {
-		int x = Integer.parseInt(coordX2.getText());
-		return x >= 1 ? x-1 : 0;
-	}
-	public int getY2() {
-		int y = Integer.parseInt(coordY2.getText());
 		return y >= 1 ? y-1 : 0;
 	}
 	public int getProprietaire() {

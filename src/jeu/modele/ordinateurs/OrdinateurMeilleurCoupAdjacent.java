@@ -125,7 +125,7 @@ public class OrdinateurMeilleurCoupAdjacent extends OrdinateurAleatoire {
 			return coupGroupe(secondCoup);
 
 		// sécurité même si impossible théoriquement
-		return coupGroupe(meilleurCoupAdjacent(partie));
+		return coupGroupe(coupAleatoire(partie));
 	}
 
 	/**
