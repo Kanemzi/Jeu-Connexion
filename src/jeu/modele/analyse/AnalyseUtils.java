@@ -79,12 +79,37 @@ public class AnalyseUtils {
 	}
 
 	/**
-	 * Retourne un tableau des poids de chaque zone
+	 * Retourne un tableau des poids de chaque case en fonction du score localement accessible
 	 * 
 	 * @param p
 	 * @return
 	 */
-	public static PoidsPlateau calculerPoidsPlateau(Plateau p) {
+	public static PoidsPlateau heuristiquePoidsPlateau(Plateau p) {
+		int taille = p.getTaille();
+
+		PoidsPlateau pp = new PoidsPlateau(p.getTaille());
+
+		for (int y = 0; y < taille; y++) {
+			for (int x = 0; x < taille; x++) {
+				pp.poids[y][x] = poidsEmplacement(p, p.getCase(x, y));
+				if (pp.poids[y][x] > pp.poidsMax) {
+					pp.poidsMax = pp.poids[y][x];
+					pp.xmax = x;
+					pp.ymax = y;
+				}
+			}
+		}
+
+		return pp;
+	}
+	
+	/**
+	 * Retourne un tableau des poids de chaque case en terme de points par liaison de composantes
+	 * 
+	 * @param p
+	 * @return
+	 */
+	public static PoidsPlateau heuristiqueLiaison(Plateau p) {
 		int taille = p.getTaille();
 
 		PoidsPlateau pp = new PoidsPlateau(p.getTaille());
